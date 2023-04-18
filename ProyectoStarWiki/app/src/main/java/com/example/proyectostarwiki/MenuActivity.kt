@@ -1,6 +1,7 @@
 package com.example.proyectostarwiki
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -19,6 +20,11 @@ class MenuActivity : AppCompatActivity() {
         setContentView(binding.root)
         prefs= Prefs(this)
         setListeners()
+        ponerColor()
+    }
+
+    private fun ponerColor() {
+
     }
 
     private fun setListeners() {
