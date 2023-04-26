@@ -12,6 +12,12 @@
         android:theme="@style/Theme.ProyectoStarWiki"
         tools:targetApi="31">
         <activity
+            android:name=".GestionPilotosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PilotosActivity"
+            android:exported="false" />
+        <activity
             android:name=".NavesActivity"
             android:exported="false" />
         <activity
