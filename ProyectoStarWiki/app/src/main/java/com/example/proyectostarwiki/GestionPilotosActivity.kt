@@ -17,6 +17,7 @@ class GestionPilotosActivity : AppCompatActivity() {
     var lista = mutableListOf<PilotosData>()
     lateinit var adapter: PilotosAdapter
     lateinit var db: FirebaseDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGestionPilotosBinding.inflate(layoutInflater)
