@@ -7,22 +7,27 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyectostarwiki.adapters.NavesAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
+import com.example.proyectostarwiki.basedatos.BaseDatos
 import com.example.proyectostarwiki.databinding.ActivityNavesBinding
 import com.example.proyectostarwiki.models.NavesData
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
 class NavesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNavesBinding
     var lista = mutableListOf<NavesData>()
     lateinit var adapter: NavesAdapter
-    lateinit var db: FirebaseDatabase
+    lateinit var conexion: BaseDatos
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNavesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        db=FirebaseDatabase.getInstance("https://starwiki-70794-default-rtdb.europe-west1.firebasedatabase.app/")
+        conexion=BaseDatos(this)
         setRecycler()
+        rellenarBaseNaves()
+    }
+
+    private fun rellenarBaseNaves() {
+        //Probar en traer naves
     }
 
     private fun setRecycler() {
@@ -45,7 +50,10 @@ class NavesActivity : AppCompatActivity() {
             val datos = apiClient.apiClient.getNaves()
             adapter.lista=datos.results.toMutableList()
             adapter.notifyDataSetChanged()
-            var databaseReference = db.getReference().child("naves").setValue(datos.results)
+            //if ()
+            for (i in datos.results){
+                conexion.createNaves(datos.results[datos.results.indexOf(i)])
+            }
         }
     }
 

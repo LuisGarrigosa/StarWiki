@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.proyectostarwiki.models.NavesData
 import com.example.proyectostarwiki.models.PilotosData
-import com.example.proyectostarwiki.models.naves
 
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
@@ -23,8 +22,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "capacidad text not null, " +
                 "longitud text not null, " +
                 "pasajeros text not null, " +
-                "creditos text not null, " +
-                "piloto text not null)"
+                "creditos text not null)"
         p0?.execSQL(qnaves)
 
         val qpilotos= "create table $TABLAPILOTOS(" +
