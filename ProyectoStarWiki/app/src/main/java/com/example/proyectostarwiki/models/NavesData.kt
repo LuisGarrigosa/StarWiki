@@ -14,7 +14,7 @@ data class NavesData(
 ):java.io.Serializable
 
 data class PilotosData(
-    val nombreNave:String,
+    val nombreNave:String?,
     @SerializedName("name") val nombre:String,
     @SerializedName("gender") val genero:String,
     @SerializedName("height") val altura:String,
