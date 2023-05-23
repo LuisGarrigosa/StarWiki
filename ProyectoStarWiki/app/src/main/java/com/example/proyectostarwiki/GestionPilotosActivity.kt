@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyectostarwiki.adapters.PilotosAdapter
+import com.example.proyectostarwiki.adapters.SeleccionPilotosAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
 import com.example.proyectostarwiki.databinding.ActivityGestionPilotosBinding
@@ -17,7 +19,7 @@ class GestionPilotosActivity : AppCompatActivity() {
     lateinit var binding: ActivityGestionPilotosBinding
     var lista = mutableListOf<PilotosData>()
     var listaBase = mutableListOf<PilotosData>()
-    lateinit var adapter: PilotosAdapter
+    lateinit var adapter: SeleccionPilotosAdapter
     lateinit var conexion: BaseDatos
 
 
@@ -26,24 +28,36 @@ class GestionPilotosActivity : AppCompatActivity() {
         binding = ActivityGestionPilotosBinding.inflate(layoutInflater)
         setContentView(binding.root)
         conexion= BaseDatos(this)
-        adapter= PilotosAdapter(lista)
         traerPilotos()
-        rellenarSpinner()
+        //rellenarSpinner()
+        setRecycler()
         setListeners()
 
     }
 
-    private fun rellenarSpinner() {
-        var pilotos= ArrayList<String>()
-        listaBase = conexion.readPilotos()
-
-        for (i in listaBase){
-            pilotos.add(listaBase[listaBase.indexOf(i)].nombre)
-        }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, pilotos)
-        binding.spinnerPilotos.adapter= adapter
+    private fun setRecycler() {
+        val layoutManager = GridLayoutManager(this, 4)
+        binding.recSeleccionPilotos.layoutManager=layoutManager
+        adapter=SeleccionPilotosAdapter(lista, {addItem(it)})
+        binding.recSeleccionPilotos.adapter=adapter
     }
 
+    private fun addItem(position: Int) {
+        //Añadir piloto
+    }
+
+    /*
+        private fun rellenarSpinner() {
+            var pilotos= ArrayList<String>()
+            listaBase = conexion.readPilotos()
+
+            for (i in listaBase){
+                pilotos.add(listaBase[listaBase.indexOf(i)].nombre)
+            }
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, pilotos)
+            binding.spinnerPilotos.adapter= adapter
+        }
+    */
     private fun traerPilotos() {
         lifecycleScope.launch() {
             val datos = apiClient.apiClient.getPilotos()
@@ -60,6 +74,7 @@ class GestionPilotosActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
+        /*
         binding.spinnerPilotos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 
@@ -70,13 +85,9 @@ class GestionPilotosActivity : AppCompatActivity() {
             }
 
         }
-
+*/
         binding.btnCancelar.setOnClickListener {
             finishAffinity()
-        }
-
-        binding.btnGuardar.setOnClickListener {
-
         }
     }
 }
