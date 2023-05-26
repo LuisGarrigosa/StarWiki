@@ -1,10 +1,12 @@
 package com.example.proyectostarwiki
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyectostarwiki.adapters.PilotosAdapter
@@ -12,6 +14,7 @@ import com.example.proyectostarwiki.adapters.SeleccionPilotosAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
 import com.example.proyectostarwiki.databinding.ActivityGestionPilotosBinding
+import com.example.proyectostarwiki.models.NavesData
 import com.example.proyectostarwiki.models.PilotosData
 import kotlinx.coroutines.launch
 
@@ -21,6 +24,7 @@ class GestionPilotosActivity : AppCompatActivity() {
     var listaBase = mutableListOf<PilotosData>()
     lateinit var adapter: SeleccionPilotosAdapter
     lateinit var conexion: BaseDatos
+    lateinit var naveSeleccionada: NavesData
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +33,6 @@ class GestionPilotosActivity : AppCompatActivity() {
         setContentView(binding.root)
         conexion= BaseDatos(this)
         traerPilotos()
-        //rellenarSpinner()
         setRecycler()
         setListeners()
 
@@ -44,26 +47,23 @@ class GestionPilotosActivity : AppCompatActivity() {
 
     private fun addItem(position: Int) {
         //Añadir piloto
+        val piloto = listaBase[position]
+        if (conexion.comprobarPiloto(piloto.nombre)){
+            conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
+            val i = Intent(this, PilotosActivity::class.java).apply {
+                putExtra("NAVESEL", naveSeleccionada)
+            }
+            startActivity(i)
+        } else {
+            Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    /*
-        private fun rellenarSpinner() {
-            var pilotos= ArrayList<String>()
-            listaBase = conexion.readPilotos()
-
-            for (i in listaBase){
-                pilotos.add(listaBase[listaBase.indexOf(i)].nombre)
-            }
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, pilotos)
-            binding.spinnerPilotos.adapter= adapter
-        }
-    */
     private fun traerPilotos() {
         lifecycleScope.launch() {
             val datos = apiClient.apiClient.getPilotos()
             adapter.lista = datos.results.toMutableList()
             adapter.notifyDataSetChanged()
-            //adapter.lista=lista
             listaBase = conexion.readPilotos()
             if (listaBase.size==0){
                 for (i in datos.results){
@@ -71,23 +71,16 @@ class GestionPilotosActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val datos = intent.extras
+        naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
     }
 
     private fun setListeners() {
-        /*
-        binding.spinnerPilotos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                
-            }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-        }
-*/
         binding.btnCancelar.setOnClickListener {
-            finishAffinity()
+            val i = Intent(this, PilotosActivity::class.java)
+            startActivity(i)
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.proyectostarwiki
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.proyectostarwiki.adapters.NavesAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
@@ -18,12 +20,20 @@ class NavesActivity : AppCompatActivity() {
     var listaBase = mutableListOf<NavesData>()
     lateinit var adapter: NavesAdapter
     lateinit var conexion: BaseDatos
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNavesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         conexion=BaseDatos(this)
+        cargarFondo()
         setRecycler()
+    }
+
+    private fun cargarFondo() {
+        val urlGif = "https://i.gifer.com/IrM.gif"
+        val uri = Uri.parse(urlGif)
+        Glide.with(applicationContext).load(uri).into(binding.fondoNaves)
     }
 
     private fun setRecycler() {
@@ -35,7 +45,9 @@ class NavesActivity : AppCompatActivity() {
     }
 
     private fun onItemClick(nave: NavesData) {
-        val i = Intent(this,PilotosActivity::class.java)
+        val i = Intent(this,PilotosActivity::class.java).apply {
+            putExtra("NAVESEL", nave)
+        }
         startActivity(i)
     }
 

@@ -7,6 +7,17 @@
     android:background="#151515"
     tools:context=".MenuActivity">
 
+    <ImageView
+        android:id="@+id/fondoMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <Button
         android:id="@+id/btnNaves"
         android:layout_width="wrap_content"

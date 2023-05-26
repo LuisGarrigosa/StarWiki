@@ -30,7 +30,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "genero text not null, " +
                 "altura text not null, " +
                 "peso text not null, " +
-                "nombreNave text not null)"
+                "nombreNave text)"
         p0?.execSQL(qpilotos)
     }
 
@@ -95,7 +95,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             put("genero", piloto.genero)
             put("altura", piloto.altura)
             put("peso", piloto.peso)
-            put("nombreNave", piloto.nombreNave)
+            put("nombreNave", "null")
         }
         val ins = conexion.insert(TABLAPILOTOS, null, valores)
         conexion.close()
@@ -126,6 +126,32 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         }
         conexion.close()
         return lista
+    }
+
+    fun comprobarPiloto(nombre: String): Boolean{
+        val q = "select nombre from $TABLAPILOTOS where nombre='$nombre' where nombreNave!='null'"
+        val conexion = this.readableDatabase
+        var contador=0
+        try {
+            val cursor = conexion.rawQuery(q, null)
+            contador = cursor.count
+            cursor.close()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        conexion.close()
+
+        if (contador>=0){
+            return false
+        } else {
+            return true
+        }
+    }
+
+    fun modificarPiloto(nombre: String, nombreNave: String){
+        val conexion=this.writableDatabase
+        val q="update $TABLAPILOTOS set nombreNave='$nombreNave' where nombre='$nombre'"
+        conexion.close()
     }
 
     fun borrarPilotos(nombre: String){

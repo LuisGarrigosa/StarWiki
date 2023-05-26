@@ -1,10 +1,11 @@
 package com.example.proyectostarwiki
 
 import android.content.Intent
-import android.content.res.Resources.Theme
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import com.bumptech.glide.Glide
 import com.example.proyectostarwiki.databinding.ActivityMainBinding
 import com.example.proyectostarwiki.prefs.Prefs
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -44,8 +45,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         prefs= Prefs(this)
+        cargarFondo()
         comprobarLogin()
         setListeners()
+    }
+
+    private fun cargarFondo() {
+        val urlGif = "https://i.gifer.com/IrM.gif"
+        val uri = Uri.parse(urlGif)
+        Glide.with(applicationContext).load(uri).into(binding.fondo)
     }
 
     private fun irMenu() {
