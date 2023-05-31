@@ -7,3 +7,7 @@ data class naves(
 data class pilotos(
     val results: List<PilotosData>
 )
+
+data class vehiculos(
+    val results: List<VehiculosData>
+)

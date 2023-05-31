@@ -35,9 +35,13 @@ class PilotosActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        val urlGif = "https://i.gifer.com/IrM.gif"
-        val uri = Uri.parse(urlGif)
-        Glide.with(applicationContext).load(uri).into(binding.fondoPilotos)
+        if(NetworkUtils.isInternetReachable(this)){
+            val urlGif = "https://i.gifer.com/IrM.gif"
+            val uri = Uri.parse(urlGif)
+            Glide.with(applicationContext).load(uri).into(binding.fondoPilotos)
+        } else {
+            //Fondo nuevo
+        }
     }
 
     private fun mandarDatos() {

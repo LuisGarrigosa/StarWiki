@@ -18,3 +18,11 @@ data class PilotosData(
     @SerializedName("mass") val peso:String,
     val nombreNave:String?
 ):java.io.Serializable
+
+data class VehiculosData(
+    @SerializedName("name") val nombre: String,
+    @SerializedName("model") val modelo: String,
+    @SerializedName("length") val altura: String,
+    @SerializedName("max_atmosphering_speed") val velocidad: String,
+    @SerializedName("manufacturer") val fabricante: String
+):java.io.Serializable

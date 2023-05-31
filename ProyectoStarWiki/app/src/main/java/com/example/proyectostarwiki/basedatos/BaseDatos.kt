@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.proyectostarwiki.models.NavesData
 import com.example.proyectostarwiki.models.PilotosData
+import com.example.proyectostarwiki.models.VehiculosData
 
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
@@ -13,6 +14,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         const val VERSION=1
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
+        const val TABLAVEHICULOS="vehiculos"
     }
 
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -32,10 +34,64 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "peso text not null, " +
                 "nombreNave text)"
         p0?.execSQL(qpilotos)
+
+        val qvehiculos= "create table $TABLAVEHICULOS(" +
+                "nombre text primary key not null unique, " +
+                "modelo text not null, " +
+                "altura text not null, " +
+                "velocidad text not null, " +
+                "fabricante text not null)"
+        p0?.execSQL(qvehiculos)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
 
+    }
+
+    fun createVehiculos(vehiculo: VehiculosData): Long{
+        val conexion = this.writableDatabase
+        val valores = ContentValues().apply {
+            put("nombre", vehiculo.nombre)
+            put("modelo", vehiculo.modelo)
+            put("altura", vehiculo.altura)
+            put("velocidad", vehiculo.velocidad)
+            put("fabricante", vehiculo.fabricante)
+        }
+        val ins = conexion.insert(TABLAVEHICULOS,null, valores)
+        conexion.close()
+        return ins
+    }
+
+    fun readVehiculos(): MutableList<VehiculosData>{
+        val lista = mutableListOf<VehiculosData>()
+        val q="select * from $TABLAVEHICULOS order by nombre"
+        val conexion=this.readableDatabase
+        try {
+            val cursor = conexion.rawQuery(q, null)
+            if (cursor.moveToFirst()){
+                do {
+                    val vehiculo=VehiculosData(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4)
+                    )
+                    lista.add(vehiculo)
+                }while (cursor.moveToNext())
+            }
+            cursor.close()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        conexion.close()
+        return lista
+    }
+
+    fun borrarVehiculos(nombre: String){
+        val conexion=this.writableDatabase
+        val q="delete from $TABLAVEHICULOS where nombre=nombre"
+        conexion.close()
     }
 
     //Metodos para gestionar la tabla de naves

@@ -31,17 +31,21 @@ class NavesActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        val urlGif = "https://i.gifer.com/IrM.gif"
-        val uri = Uri.parse(urlGif)
-        Glide.with(applicationContext).load(uri).into(binding.fondoNaves)
+        if(NetworkUtils.isInternetReachable(this)){
+            val urlGif = "https://i.gifer.com/IrM.gif"
+            val uri = Uri.parse(urlGif)
+            Glide.with(applicationContext).load(uri).into(binding.fondoNaves)
+        } else {
+            //Fondo nuevo
+        }
     }
 
     private fun setRecycler() {
         traerNaves()
         val layoutManager = GridLayoutManager(this, 1)
-        binding.recView.layoutManager=layoutManager
+        binding.recViewNaves.layoutManager=layoutManager
         adapter= NavesAdapter(lista, {onItemClick(it)})
-        binding.recView.adapter=adapter
+        binding.recViewNaves.adapter=adapter
     }
 
     private fun onItemClick(nave: NavesData) {

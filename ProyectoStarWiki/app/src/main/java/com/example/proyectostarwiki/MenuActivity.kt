@@ -7,19 +7,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.MediaController
 import com.bumptech.glide.Glide
 import com.example.proyectostarwiki.databinding.ActivityMenuBinding
 import com.example.proyectostarwiki.prefs.Prefs
 import com.google.firebase.auth.FirebaseAuth
+import android.util.DisplayMetrics
+
+
+
 
 class MenuActivity : AppCompatActivity() {
     lateinit var binding: ActivityMenuBinding
     lateinit var prefs:Prefs
+    lateinit var metrics: DisplayMetrics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        metrics = DisplayMetrics()
         prefs= Prefs(this)
         cargarFondo()
         setListeners()
@@ -27,9 +34,16 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        val urlGif = "https://i.gifer.com/IrM.gif"
-        val uri = Uri.parse(urlGif)
-        Glide.with(applicationContext).load(uri).into(binding.fondoMenu)
+        var idVideo = R.raw.stars
+        var rutaVideo="android.resource://"+packageName+"/$idVideo"
+        var uri = Uri.parse(rutaVideo)
+        try {
+            binding.fondoMenu.setVideoURI(uri)
+            binding.fondoMenu.start()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        windowManager.defaultDisplay.getMetrics(metrics)
     }
 
     private fun ponerColor() {
@@ -40,6 +54,17 @@ class MenuActivity : AppCompatActivity() {
         binding.btnNaves.setOnClickListener{
             irNaves()
         }
+
+        binding.btnVehiculos.setOnClickListener {
+            irVehiculos()
+        }
+        binding.fondoMenu.setOnPreparedListener{
+            it.isLooping=true
+        }
+    }
+
+    private fun irVehiculos() {
+        startActivity((Intent(this,VehiculosActivity::class.java)))
     }
 
     private fun irNaves() {
