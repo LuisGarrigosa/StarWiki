@@ -3,7 +3,6 @@ package com.example.proyectostarwiki
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Adapter
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -20,6 +19,7 @@ class VehiculosActivity : AppCompatActivity() {
     lateinit var conexion: BaseDatos
     var lista = mutableListOf<VehiculosData>()
     var listaBase = mutableListOf<VehiculosData>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVehiculosBinding.inflate(layoutInflater)
@@ -32,9 +32,9 @@ class VehiculosActivity : AppCompatActivity() {
     private fun setRecycler() {
         traerVehiculos()
         val layoutManager = GridLayoutManager(this, 1)
-        binding.recViewNaves.layoutManager=layoutManager
+        binding.recViewVeh.layoutManager=layoutManager
         adapter= VehiculosAdapter(lista)
-        binding.recViewNaves.adapter=adapter
+        binding.recViewVeh.adapter=adapter
     }
 
     private fun traerVehiculos() {
@@ -52,13 +52,9 @@ class VehiculosActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        if(NetworkUtils.isInternetReachable(this)){
-            val urlGif = "https://i.gifer.com/IrM.gif"
-            val uri = Uri.parse(urlGif)
-            Glide.with(applicationContext).load(uri).into(binding.fondoVehiculos)
-        } else {
-            //Fondo nuevo
-        }
+        val urlGif = "https://i.gifer.com/IrM.gif"
+        val uri = Uri.parse(urlGif)
+        Glide.with(applicationContext).load(uri).into(binding.fondoVehiculos)
     }
 
 }

@@ -34,16 +34,9 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        var idVideo = R.raw.stars
-        var rutaVideo="android.resource://"+packageName+"/$idVideo"
-        var uri = Uri.parse(rutaVideo)
-        try {
-            binding.fondoMenu.setVideoURI(uri)
-            binding.fondoMenu.start()
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-        windowManager.defaultDisplay.getMetrics(metrics)
+        val urlGif = "https://i.gifer.com/IrM.gif"
+        val uri = Uri.parse(urlGif)
+        Glide.with(applicationContext).load(uri).into(binding.fondoMenu)
     }
 
     private fun ponerColor() {
@@ -58,13 +51,18 @@ class MenuActivity : AppCompatActivity() {
         binding.btnVehiculos.setOnClickListener {
             irVehiculos()
         }
-        binding.fondoMenu.setOnPreparedListener{
-            it.isLooping=true
+
+        binding.btnPlanetas.setOnClickListener {
+            irPlanetas()
         }
     }
 
+    private fun irPlanetas() {
+        startActivity(Intent(this, PlanetasActivity::class.java))
+    }
+
     private fun irVehiculos() {
-        startActivity((Intent(this,VehiculosActivity::class.java)))
+        startActivity(Intent(this,VehiculosActivity::class.java))
     }
 
     private fun irNaves() {

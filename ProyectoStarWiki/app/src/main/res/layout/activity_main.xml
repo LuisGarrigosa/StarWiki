@@ -7,15 +7,17 @@
     android:background="#0B0909"
     tools:context=".MainActivity">
 
-    <VideoView
+    <ImageView
         android:id="@+id/fondo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:foregroundGravity="center_horizontal"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/textView"

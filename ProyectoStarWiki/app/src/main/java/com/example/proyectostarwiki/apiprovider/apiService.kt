@@ -2,6 +2,7 @@ package com.example.proyectostarwiki.apiprovider
 
 import com.example.proyectostarwiki.models.naves
 import com.example.proyectostarwiki.models.pilotos
+import com.example.proyectostarwiki.models.planetas
 import com.example.proyectostarwiki.models.vehiculos
 import retrofit2.http.GET
 
@@ -13,4 +14,7 @@ interface apiService {
 
     @GET("vehicles/")
     suspend fun getVehiculos(): vehiculos
+
+    @GET("planets/")
+    suspend fun getPlanetas(): planetas
 }

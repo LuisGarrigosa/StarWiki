@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.proyectostarwiki.databinding.ActivityMainBinding
@@ -52,24 +51,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        /*
-        if(NetworkUtils.isInternetReachable(this)){
-            val urlGif = "https://i.gifer.com/IrM.gif"
-            val uri = Uri.parse(urlGif)
-            Glide.with(applicationContext).load(uri).into(binding.fondo)
-        } else {
-            //Fondo nuevo
-        }
-         */
-        var idVideo = R.raw.stars
-        var rutaVideo="android.resource://"+packageName+"/$idVideo"
-        var uri = Uri.parse(rutaVideo)
-        try {
-            binding.fondo.setVideoURI(uri)
-            binding.fondo.start()
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
+        val urlGif = "https://i.gifer.com/IrM.gif"
+        val uri = Uri.parse(urlGif)
+        Glide.with(applicationContext).load(uri).into(binding.fondo)
     }
 
 
@@ -80,9 +64,6 @@ class MainActivity : AppCompatActivity() {
     private fun setListeners() {
         binding.botonGoogle.setOnClickListener {
             login()
-        }
-        binding.fondo.setOnPreparedListener{
-            it.isLooping=true
         }
     }
 

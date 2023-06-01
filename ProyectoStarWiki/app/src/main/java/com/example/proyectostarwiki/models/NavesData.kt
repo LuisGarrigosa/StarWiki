@@ -26,3 +26,11 @@ data class VehiculosData(
     @SerializedName("max_atmosphering_speed") val velocidad: String,
     @SerializedName("manufacturer") val fabricante: String
 ):java.io.Serializable
+
+data class PlanetasData(
+    @SerializedName("name") val nombre: String,
+    @SerializedName("gravity") val gravedad: String,
+    @SerializedName("population") val poblacion: String,
+    @SerializedName("diameter") val diametro: String,
+    @SerializedName("terrain") val terreno: String
+):java.io.Serializable

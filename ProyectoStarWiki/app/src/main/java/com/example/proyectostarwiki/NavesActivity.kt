@@ -31,13 +31,9 @@ class NavesActivity : AppCompatActivity() {
     }
 
     private fun cargarFondo() {
-        if(NetworkUtils.isInternetReachable(this)){
-            val urlGif = "https://i.gifer.com/IrM.gif"
-            val uri = Uri.parse(urlGif)
-            Glide.with(applicationContext).load(uri).into(binding.fondoNaves)
-        } else {
-            //Fondo nuevo
-        }
+        val urlGif = "https://i.gifer.com/IrM.gif"
+        val uri = Uri.parse(urlGif)
+        Glide.with(applicationContext).load(uri).into(binding.fondoNaves)
     }
 
     private fun setRecycler() {

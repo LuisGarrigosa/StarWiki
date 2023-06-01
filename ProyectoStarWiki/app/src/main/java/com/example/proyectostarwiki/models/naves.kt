@@ -11,3 +11,7 @@ data class pilotos(
 data class vehiculos(
     val results: List<VehiculosData>
 )
+
+data class planetas(
+    val results: List<PlanetasData>
+)

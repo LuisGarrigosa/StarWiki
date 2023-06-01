@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardBackgroundColor="#32FFFFFF"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
     app:cardUseCompatPadding="true">
@@ -11,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#888080"
+        android:background="#3B888080"
         android:padding="6dp">
 
         <TextView
@@ -25,7 +26,7 @@
             android:textSize="16sp"
             android:textStyle="italic"
             app:layout_constraintStart_toEndOf="@+id/tvVelVeh"
-            app:layout_constraintTop_toBottomOf="@+id/tvFabriVeh" />
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
         <TextView
             android:id="@+id/tvNombreVeh"
@@ -33,11 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             android:textColor="#F31111"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,8 +59,8 @@
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
             android:text="Fabricante:"
             android:textColor="#3F51B5"
             android:textSize="16sp"
@@ -82,25 +83,30 @@
 
         <TextView
             android:id="@+id/tvModeloVeh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="20dp"
+            android:autoSizeMaxTextSize="16sp"
+            android:autoSizeTextType="uniform"
+            android:inputType="textMultiLine"
             android:text="TextView"
             android:textColor="#F8F2F2"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView14"
             app:layout_constraintStart_toEndOf="@+id/textView14"
             app:layout_constraintTop_toTopOf="@+id/textView14" />
 
         <TextView
             android:id="@+id/tvFabriVeh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="20dp"
+            android:autoSizeMaxTextSize="16sp"
+            android:autoSizeTextType="uniform"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
             android:text="TextView"
             android:textColor="#F8F2F2"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView15"
             app:layout_constraintStart_toEndOf="@+id/textView15"
             app:layout_constraintTop_toTopOf="@+id/textView15" />
 
@@ -127,6 +133,6 @@
             android:textColor="#F8F2F2"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/textView17"
-            app:layout_constraintTop_toBottomOf="@+id/tvFabriVeh" />
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.proyectostarwiki.models.NavesData
 import com.example.proyectostarwiki.models.PilotosData
+import com.example.proyectostarwiki.models.PlanetasData
 import com.example.proyectostarwiki.models.VehiculosData
 
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
@@ -15,6 +16,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
+        const val TABLAPLANETAS="planetas"
     }
 
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -42,11 +44,70 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "velocidad text not null, " +
                 "fabricante text not null)"
         p0?.execSQL(qvehiculos)
+
+        val qplanetas= "create table $TABLAPLANETAS(" +
+                "nombre text primary key not null unique, " +
+                "gravedad text not null, " +
+                "poblacion text not null, " +
+                "diametro text not null, " +
+                "terreno text not null)"
+        p0?.execSQL(qplanetas)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
 
     }
+
+    //Metodos para gestionar la tabla planetas
+
+    fun createPlanetas(planeta: PlanetasData): Long{
+        val conexion = this.writableDatabase
+        val valores = ContentValues().apply {
+            put("nombre", planeta.nombre)
+            put("gravedad", planeta.gravedad)
+            put("poblacion", planeta.poblacion)
+            put("diametro", planeta.diametro)
+            put("terreno", planeta.terreno)
+        }
+        val ins = conexion.insert(TABLAPLANETAS,null, valores)
+        conexion.close()
+        return ins
+    }
+
+    fun readPlanetas(): MutableList<PlanetasData>{
+        val lista = mutableListOf<PlanetasData>()
+        val q="select * from $TABLAPLANETAS order by nombre"
+        val conexion=this.readableDatabase
+        try {
+            val cursor = conexion.rawQuery(q, null)
+            if (cursor.moveToFirst()){
+                do {
+                    val planeta=PlanetasData(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4)
+                    )
+                    lista.add(planeta)
+                }while (cursor.moveToNext())
+            }
+            cursor.close()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        conexion.close()
+        return lista
+    }
+
+    fun borrarPlanetas(nombre: String){
+        val conexion=this.writableDatabase
+        val q="delete from $TABLAPLANETAS where nombre=nombre"
+        conexion.close()
+    }
+
+
+    //Metodos para gestionar la tabla vehiculos
 
     fun createVehiculos(vehiculo: VehiculosData): Long{
         val conexion = this.writableDatabase
