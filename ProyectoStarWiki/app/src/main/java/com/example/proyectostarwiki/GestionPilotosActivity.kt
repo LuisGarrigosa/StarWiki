@@ -1,5 +1,6 @@
 package com.example.proyectostarwiki
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -45,20 +46,25 @@ class GestionPilotosActivity : AppCompatActivity() {
     }
 
     private fun addItem(position: Int) {
-        //Añadir piloto
-        /*
-        val piloto = listaBase[position]
-        if (conexion.comprobarPiloto(piloto.nombre)){
-            conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
-            Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
-            val i = Intent(this, PilotosActivity::class.java).apply {
-                putExtra("NAVESEL", naveSeleccionada)
+        if (listaBase.isNotEmpty()) {
+            //Añadir piloto
+            val piloto = listaBase[position]
+            if (conexion.comprobarPiloto(piloto.nombre)){
+                conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
+                Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
+                val i = Intent(this, PilotosActivity::class.java).apply {
+                    putExtra("NAVESEL", naveSeleccionada)
+                }
+                startActivity(i)
+            } else {
+                Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
             }
-            startActivity(i)
         } else {
-            Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+            // La lista está vacía, realiza una acción alternativa o muestra un mensaje de error
+            Toast.makeText(this, "La lista esta vacia", Toast.LENGTH_SHORT).show()
         }
-         */
+
+        /*
         val piloto = listaBase.getOrNull(position)
         if (piloto != null) {
             if (conexion.comprobarPiloto(piloto.nombre)) {
@@ -74,19 +80,25 @@ class GestionPilotosActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "La lista de pilotos está vacía", Toast.LENGTH_SHORT).show()
         }
+         */
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun traerPilotos() {
         lifecycleScope.launch() {
             val datos = apiClient.apiClient.getPilotos()
             adapter.lista = datos.results.toMutableList()
             adapter.notifyDataSetChanged()
             listaBase = conexion.readPilotos()
-            if (listaBase.size==0){
+            if (listaBase.isEmpty()){
                 for (i in datos.results){
                     conexion.createPilotos(datos.results[datos.results.indexOf(i)])
                 }
+                Toast.makeText(this@GestionPilotosActivity, "Lista de pilotos rellena", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@GestionPilotosActivity, "Lista de pilotos vacía mal", Toast.LENGTH_SHORT).show()
             }
+            
         }
 
         val datos = intent.extras
@@ -101,5 +113,10 @@ class GestionPilotosActivity : AppCompatActivity() {
             }
             startActivity(i)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setRecycler()
     }
 }

@@ -9,6 +9,7 @@ import retrofit2.http.GET
 interface apiService {
     @GET("starships/")
     suspend fun getNaves(): naves
+
     @GET("people/")
     suspend fun getPilotos(): pilotos
 

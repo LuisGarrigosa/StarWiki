@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.example.proyectostarwiki.models.NavesData
 import com.example.proyectostarwiki.models.PilotosData
 import com.example.proyectostarwiki.models.PlanetasData
@@ -51,16 +52,17 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     override fun onCreate(p0: SQLiteDatabase?) {
         p0?.execSQL(qnaves)
-        p0?.execSQL(qpilotos)
-        p0?.execSQL(qvehiculos)
-        p0?.execSQL(qplanetas)
-/*
-        val tablas = arrayOf(qnaves,qpilotos,qvehiculos,qplanetas)
+        Log.d("BaseDatos", "Creando tabla naves")
 
-        for (i in tablas){
-            p0?.execSQL(i)
-        }
-        */
+        p0?.execSQL(qpilotos)
+        Log.d("BaseDatos", "Creando tabla pilotos")
+
+        p0?.execSQL(qvehiculos)
+        Log.d("BaseDatos", "Creando tabla vehiculos")
+
+        p0?.execSQL(qplanetas)
+        Log.d("BaseDatos", "Creando tabla planetas")
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
