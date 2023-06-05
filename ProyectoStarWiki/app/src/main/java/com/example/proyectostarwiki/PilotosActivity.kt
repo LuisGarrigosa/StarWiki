@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.example.proyectostarwiki.adapters.NavesAdapter
 import com.example.proyectostarwiki.adapters.PilotosAdapter
 import com.example.proyectostarwiki.basedatos.BaseDatos
 import com.example.proyectostarwiki.databinding.ActivityPilotosBinding
@@ -20,7 +19,6 @@ class PilotosActivity : AppCompatActivity() {
     lateinit var conexion: BaseDatos
     var listaBase = mutableListOf<PilotosData>()
     lateinit var naveSeleccionada: NavesData
-    lateinit var pilotoSeleccionado: PilotosData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +57,22 @@ class PilotosActivity : AppCompatActivity() {
         val datos = intent.extras
         naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
 
-        listaBase=conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
-
         val layoutManager = GridLayoutManager(this, 3)
-        binding.recPilotos.layoutManager=layoutManager
-        adapter= PilotosAdapter(listaBase)
-        binding.recPilotos.adapter=adapter
+        adapter = PilotosAdapter(listaBase)
+        binding.recPilotos.layoutManager = layoutManager
+        binding.recPilotos.adapter = adapter
+    }
+
+    private fun actualizarListaPilotos() {
+        listaBase.clear()
+        listaBase.addAll(conexion.readPilotosSeleccionados(naveSeleccionada.nombre))
+        adapter.notifyDataSetChanged()
+
+        if (listaBase.size > 0) {
+            binding.tvVacio.visibility = View.INVISIBLE
+        } else {
+            binding.tvVacio.visibility = View.VISIBLE
+        }
     }
 
     private fun cogerLista() {
@@ -77,11 +85,12 @@ class PilotosActivity : AppCompatActivity() {
         }else{
             binding.tvVacio.visibility = View.VISIBLE
         }
+
+        setRecycler()
     }
 
     override fun onResume() {
         super.onResume()
-        cogerLista()
-        setRecycler()
+        actualizarListaPilotos()
     }
 }

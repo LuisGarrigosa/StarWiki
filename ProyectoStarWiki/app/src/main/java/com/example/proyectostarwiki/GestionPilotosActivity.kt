@@ -58,6 +58,7 @@ class GestionPilotosActivity : AppCompatActivity() {
                     putExtra("NAVESEL", naveSeleccionada)
                     putExtra("PILOTOSEL", piloto)
                 }
+                listaBase = conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
                 startActivity(i)
             } else {
                 Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
@@ -66,24 +67,6 @@ class GestionPilotosActivity : AppCompatActivity() {
             // La lista está vacía, realiza una acción alternativa o muestra un mensaje de error
             Toast.makeText(this, "La lista esta vacia", Toast.LENGTH_SHORT).show()
         }
-
-        /*
-        val piloto = listaBase.getOrNull(position)
-        if (piloto != null) {
-            if (conexion.comprobarPiloto(piloto.nombre)) {
-                conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
-                Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
-                val i = Intent(this, PilotosActivity::class.java).apply {
-                    putExtra("NAVESEL", naveSeleccionada)
-                }
-                startActivity(i)
-            } else {
-                Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(this, "La lista de pilotos está vacía", Toast.LENGTH_SHORT).show()
-        }
-         */
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -97,11 +80,7 @@ class GestionPilotosActivity : AppCompatActivity() {
                 for (i in datos.results){
                     conexion.createPilotos(datos.results[datos.results.indexOf(i)])
                 }
-                Toast.makeText(this@GestionPilotosActivity, "Lista de pilotos rellena", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@GestionPilotosActivity, "Lista de pilotos vacía mal", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         val datos = intent.extras
