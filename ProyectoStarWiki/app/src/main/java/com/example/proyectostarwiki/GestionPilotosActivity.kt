@@ -46,6 +46,8 @@ class GestionPilotosActivity : AppCompatActivity() {
     }
 
     private fun addItem(position: Int) {
+        listaBase = conexion.readPilotos()
+
         if (listaBase.isNotEmpty()) {
             //Añadir piloto
             val piloto = listaBase[position]
@@ -54,6 +56,7 @@ class GestionPilotosActivity : AppCompatActivity() {
                 Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
                 val i = Intent(this, PilotosActivity::class.java).apply {
                     putExtra("NAVESEL", naveSeleccionada)
+                    putExtra("PILOTOSEL", piloto)
                 }
                 startActivity(i)
             } else {
@@ -98,7 +101,7 @@ class GestionPilotosActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this@GestionPilotosActivity, "Lista de pilotos vacía mal", Toast.LENGTH_SHORT).show()
             }
-            
+
         }
 
         val datos = intent.extras

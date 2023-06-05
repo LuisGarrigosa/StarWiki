@@ -118,7 +118,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarPlanetas(nombre: String){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPLANETAS where nombre=nombre"
+        val q="delete from $TABLAPLANETAS where nombre='$nombre'"
         conexion.close()
     }
 
@@ -167,7 +167,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarVehiculos(nombre: String){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAVEHICULOS where nombre=nombre"
+        val q="delete from $TABLAVEHICULOS where nombre='$nombre'"
         conexion.close()
     }
 
@@ -216,7 +216,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarNaves(nombre: String){
         val conexion=this.writableDatabase
-        val q="delete from $TABLANAVES where nombre=nombre"
+        val q="delete from $TABLANAVES where nombre='$nombre'"
         conexion.close()
     }
 
@@ -261,6 +261,36 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             conexion.close()
         }
         return lista
+
+    }
+
+    @SuppressLint("Range")
+    fun readPilotosSeleccionados(nombreNave: String): MutableList<PilotosData>{
+        val lista = mutableListOf<PilotosData>()
+        val q="select * from $TABLAPILOTOS where nombreNave='$nombreNave' order by nombre"
+        val conexion=this.readableDatabase
+        try {
+            val cursor = conexion.rawQuery(q, null)
+            if (cursor.moveToFirst()){
+                do {
+                    val piloto=PilotosData(
+                        cursor.getString(cursor.getColumnIndex("nombre")),
+                        cursor.getString(cursor.getColumnIndex("genero")),
+                        cursor.getString(cursor.getColumnIndex("altura")),
+                        cursor.getString(cursor.getColumnIndex("peso")),
+                        cursor.getString(cursor.getColumnIndex("nombreNave"))
+                    )
+                    lista.add(piloto)
+                }while (cursor.moveToNext())
+            }
+            cursor.close()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }finally {
+            conexion.close()
+        }
+        return lista
+
     }
 
     fun comprobarPiloto(nombre: String): Boolean{
@@ -279,11 +309,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return contador > 0
     }
 
-    fun modificarPiloto(nombre: String, nombreNave: String){
-        val conexion=this.writableDatabase
-        val q="update $TABLAPILOTOS set nombreNave='$nombreNave' where nombre='$nombre'"
+    fun modificarPiloto(nombre: String, nombreNave: String) {
+        val conexion = this.writableDatabase
+        val q = "UPDATE $TABLAPILOTOS SET nombreNave = ? WHERE nombre = ?"
         try {
-            conexion.execSQL(q)
+            conexion.execSQL(q, arrayOf(nombreNave, nombre))
         } catch (e: Exception) {
             e.printStackTrace()
         }

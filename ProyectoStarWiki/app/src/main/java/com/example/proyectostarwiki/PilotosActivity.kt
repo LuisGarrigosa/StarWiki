@@ -18,9 +18,9 @@ class PilotosActivity : AppCompatActivity() {
     lateinit var binding: ActivityPilotosBinding
     lateinit var adapter: PilotosAdapter
     lateinit var conexion: BaseDatos
-    var lista = mutableListOf<PilotosData>()
     var listaBase = mutableListOf<PilotosData>()
     lateinit var naveSeleccionada: NavesData
+    lateinit var pilotoSeleccionado: PilotosData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,14 +56,22 @@ class PilotosActivity : AppCompatActivity() {
     }
 
     private fun setRecycler() {
+        val datos = intent.extras
+        naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
+
+        listaBase=conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
+
         val layoutManager = GridLayoutManager(this, 3)
         binding.recPilotos.layoutManager=layoutManager
-        adapter= PilotosAdapter(lista)
+        adapter= PilotosAdapter(listaBase)
         binding.recPilotos.adapter=adapter
     }
 
     private fun cogerLista() {
-        listaBase=conexion.readPilotos()
+        val datos = intent.extras
+        naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
+
+        listaBase=conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
         if (listaBase.size>0){
             binding.tvVacio.visibility = View.INVISIBLE
         }else{
