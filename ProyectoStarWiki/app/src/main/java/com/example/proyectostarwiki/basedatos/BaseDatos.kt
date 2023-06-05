@@ -1,5 +1,6 @@
 package com.example.proyectostarwiki.basedatos
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -12,51 +13,64 @@ import com.example.proyectostarwiki.models.VehiculosData
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
         const val DB="starWiki"
-        const val VERSION=1
+        const val VERSION=2
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
         const val TABLAPLANETAS="planetas"
-    }
 
-    override fun onCreate(p0: SQLiteDatabase?) {
-        val qnaves= "create table $TABLANAVES(" +
+        const val qnaves= "create table $TABLANAVES(" +
                 "nombre text primary key not null unique, " +
                 "clase text not null, " +
                 "capacidad text not null, " +
                 "longitud text not null, " +
                 "pasajeros text not null, " +
                 "creditos text not null)"
-        p0?.execSQL(qnaves)
 
-        val qpilotos= "create table $TABLAPILOTOS(" +
+        const val qpilotos= "create table $TABLAPILOTOS(" +
                 "nombre text primary key not null unique, " +
                 "genero text not null, " +
                 "altura text not null, " +
                 "peso text not null, " +
                 "nombreNave text)"
-        p0?.execSQL(qpilotos)
 
-        val qvehiculos= "create table $TABLAVEHICULOS(" +
+        const val qvehiculos= "create table $TABLAVEHICULOS(" +
                 "nombre text primary key not null unique, " +
                 "modelo text not null, " +
                 "altura text not null, " +
                 "velocidad text not null, " +
                 "fabricante text not null)"
-        p0?.execSQL(qvehiculos)
 
-        val qplanetas= "create table $TABLAPLANETAS(" +
+        const val qplanetas= "create table $TABLAPLANETAS(" +
                 "nombre text primary key not null unique, " +
                 "gravedad text not null, " +
                 "poblacion text not null, " +
                 "diametro text not null, " +
                 "terreno text not null)"
+    }
+
+    override fun onCreate(p0: SQLiteDatabase?) {
+        p0?.execSQL(qnaves)
+        p0?.execSQL(qpilotos)
+        p0?.execSQL(qvehiculos)
         p0?.execSQL(qplanetas)
+/*
+        val tablas = arrayOf(qnaves,qpilotos,qvehiculos,qplanetas)
+
+        for (i in tablas){
+            p0?.execSQL(i)
+        }
+        */
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-
+        p0?.execSQL("DROP TABLE IF EXISTS $TABLANAVES")
+        p0?.execSQL("DROP TABLE IF EXISTS $TABLAPILOTOS")
+        p0?.execSQL("DROP TABLE IF EXISTS $TABLAPLANETAS")
+        p0?.execSQL("DROP TABLE IF EXISTS $TABLAVEHICULOS")
+        onCreate(p0)
     }
+
 
     //Metodos para gestionar la tabla planetas
 
@@ -219,6 +233,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return ins
     }
 
+    @SuppressLint("Range")
     fun readPilotos(): MutableList<PilotosData>{
         val lista = mutableListOf<PilotosData>()
         val q="select * from $TABLAPILOTOS order by nombre"
@@ -228,11 +243,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             if (cursor.moveToFirst()){
                 do {
                     val piloto=PilotosData(
-                        cursor.getString(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4)
+                        cursor.getString(cursor.getColumnIndex("nombre")),
+                        cursor.getString(cursor.getColumnIndex("genero")),
+                        cursor.getString(cursor.getColumnIndex("altura")),
+                        cursor.getString(cursor.getColumnIndex("peso")),
+                        cursor.getString(cursor.getColumnIndex("nombreNave"))
                     )
                     lista.add(piloto)
                 }while (cursor.moveToNext())
@@ -240,13 +255,14 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             cursor.close()
         }catch (e: Exception){
             e.printStackTrace()
+        }finally {
+            conexion.close()
         }
-        conexion.close()
         return lista
     }
 
     fun comprobarPiloto(nombre: String): Boolean{
-        val q = "select nombre from $TABLAPILOTOS where nombre='$nombre' where nombreNave!='null'"
+        val q = "select nombre from $TABLAPILOTOS where nombre='$nombre' or nombreNave IS NOT NULL"
         val conexion = this.readableDatabase
         var contador=0
         try {
@@ -258,22 +274,24 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         }
         conexion.close()
 
-        if (contador>=0){
-            return false
-        } else {
-            return true
-        }
+        return contador > 0
     }
 
     fun modificarPiloto(nombre: String, nombreNave: String){
         val conexion=this.writableDatabase
         val q="update $TABLAPILOTOS set nombreNave='$nombreNave' where nombre='$nombre'"
+        try {
+            conexion.execSQL(q)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         conexion.close()
     }
 
     fun borrarPilotos(nombre: String){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPILOTOS where nombre=nombre"
+        val q="delete from $TABLAPILOTOS where nombre='$nombre'"
+        conexion.execSQL(q)
         conexion.close()
     }
 

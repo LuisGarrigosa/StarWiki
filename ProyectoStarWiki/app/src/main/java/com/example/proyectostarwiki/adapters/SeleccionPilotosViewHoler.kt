@@ -10,5 +10,9 @@ class SeleccionPilotosViewHoler(v: View): RecyclerView.ViewHolder(v) {
 
     fun render(piloto: PilotosData, addItem: (Int) -> Unit){
         binding.tvNombreSeleccionPiloto.text=piloto.nombre
+        binding.btnSeleccionPiloto.setOnClickListener {
+            addItem(adapterPosition)
+        }
     }
+
 }

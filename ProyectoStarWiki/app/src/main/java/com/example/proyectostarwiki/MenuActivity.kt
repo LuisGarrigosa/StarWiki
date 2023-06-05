@@ -20,13 +20,11 @@ import android.util.DisplayMetrics
 class MenuActivity : AppCompatActivity() {
     lateinit var binding: ActivityMenuBinding
     lateinit var prefs:Prefs
-    lateinit var metrics: DisplayMetrics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        metrics = DisplayMetrics()
         prefs= Prefs(this)
         cargarFondo()
         setListeners()

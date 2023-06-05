@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 
 class GestionPilotosActivity : AppCompatActivity() {
     lateinit var binding: ActivityGestionPilotosBinding
-    var lista = mutableListOf<PilotosData>()
     var listaBase = mutableListOf<PilotosData>()
     lateinit var adapter: SeleccionPilotosAdapter
     lateinit var conexion: BaseDatos
@@ -41,21 +40,39 @@ class GestionPilotosActivity : AppCompatActivity() {
     private fun setRecycler() {
         val layoutManager = GridLayoutManager(this, 4)
         binding.recSeleccionPilotos.layoutManager=layoutManager
-        adapter=SeleccionPilotosAdapter(lista, {addItem(it)})
+        adapter=SeleccionPilotosAdapter(listaBase, {addItem(it)})
         binding.recSeleccionPilotos.adapter=adapter
     }
 
     private fun addItem(position: Int) {
         //Añadir piloto
+        /*
         val piloto = listaBase[position]
         if (conexion.comprobarPiloto(piloto.nombre)){
             conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
+            Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
             val i = Intent(this, PilotosActivity::class.java).apply {
                 putExtra("NAVESEL", naveSeleccionada)
             }
             startActivity(i)
         } else {
             Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+        }
+         */
+        val piloto = listaBase.getOrNull(position)
+        if (piloto != null) {
+            if (conexion.comprobarPiloto(piloto.nombre)) {
+                conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
+                Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
+                val i = Intent(this, PilotosActivity::class.java).apply {
+                    putExtra("NAVESEL", naveSeleccionada)
+                }
+                startActivity(i)
+            } else {
+                Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(this, "La lista de pilotos está vacía", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -79,7 +96,9 @@ class GestionPilotosActivity : AppCompatActivity() {
     private fun setListeners() {
 
         binding.btnCancelar.setOnClickListener {
-            val i = Intent(this, PilotosActivity::class.java)
+            val i = Intent(this,PilotosActivity::class.java).apply {
+                putExtra("NAVESEL", naveSeleccionada)
+            }
             startActivity(i)
         }
     }
