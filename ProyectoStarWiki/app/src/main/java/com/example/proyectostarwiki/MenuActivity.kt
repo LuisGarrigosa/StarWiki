@@ -13,19 +13,20 @@ import com.example.proyectostarwiki.databinding.ActivityMenuBinding
 import com.example.proyectostarwiki.prefs.Prefs
 import com.google.firebase.auth.FirebaseAuth
 import android.util.DisplayMetrics
-
-
-
+import android.widget.Toast
+import com.example.proyectostarwiki.basedatos.BaseDatos
 
 class MenuActivity : AppCompatActivity() {
     lateinit var binding: ActivityMenuBinding
     lateinit var prefs:Prefs
+    lateinit var conexion: BaseDatos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         prefs= Prefs(this)
+        conexion = BaseDatos(this)
         cargarFondo()
         setListeners()
         ponerColor()
@@ -53,6 +54,14 @@ class MenuActivity : AppCompatActivity() {
         binding.btnPlanetas.setOnClickListener {
             irPlanetas()
         }
+
+        binding.btnPeliculas.setOnClickListener {
+            irPeliculas()
+        }
+    }
+
+    private fun irPeliculas() {
+        startActivity(Intent(this, PeliculasActivity::class.java))
     }
 
     private fun irPlanetas() {
@@ -82,6 +91,14 @@ class MenuActivity : AppCompatActivity() {
 
             R.id.itemSalir->{
                 finishAffinity()
+            }
+
+            R.id.itemBorrarTodo->{
+                FirebaseAuth.getInstance().signOut()
+                prefs.borrarTodo()
+                conexion.borrarTodo()
+                Toast.makeText(this, "Base de datos borrada, vuelva a iniciar sesión...", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
 

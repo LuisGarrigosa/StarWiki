@@ -15,3 +15,7 @@ data class vehiculos(
 data class planetas(
     val results: List<PlanetasData>
 )
+
+data class peliculas(
+    val results: List<PeliculasData>
+)

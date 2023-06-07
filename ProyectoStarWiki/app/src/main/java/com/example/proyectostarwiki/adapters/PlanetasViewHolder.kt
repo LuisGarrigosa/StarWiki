@@ -1,4 +1,4 @@
-package com.example.proyectostarwiki
+package com.example.proyectostarwiki.adapters
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

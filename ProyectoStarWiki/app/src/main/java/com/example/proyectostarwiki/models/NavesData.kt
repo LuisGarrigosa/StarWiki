@@ -34,3 +34,10 @@ data class PlanetasData(
     @SerializedName("diameter") val diametro: String,
     @SerializedName("terrain") val terreno: String
 ):java.io.Serializable
+
+data class PeliculasData(
+    @SerializedName("title") val nombre: String,
+    @SerializedName("director") val director: String,
+    @SerializedName("producer") val productor: String,
+    @SerializedName("release_date") val estreno: String,
+):java.io.Serializable

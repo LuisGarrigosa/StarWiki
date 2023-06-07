@@ -1,8 +1,9 @@
-package com.example.proyectostarwiki
+package com.example.proyectostarwiki.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.proyectostarwiki.R
 import com.example.proyectostarwiki.models.PlanetasData
 
 class PlanetasAdapter(var lista: MutableList<PlanetasData>): RecyclerView.Adapter<PlanetasViewHolder>() {

@@ -4,6 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -63,6 +66,28 @@ class NavesActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menusecciones, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.itemBorrar->{
+                conexion.borrarNaves()
+                conexion.borrarPilotos()
+                Toast.makeText(this, "Naves y pilotos borrados, vuelva a abrir la sección para volver a cargarlos...", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+
+            R.id.itemVolver->{
+                finish()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.ProyectoStarWiki"
         tools:targetApi="31">
         <activity
+            android:name=".PeliculasActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlanetasActivity"
             android:exported="false" />
         <activity

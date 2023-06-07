@@ -9,56 +9,53 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.example.proyectostarwiki.adapters.VehiculosAdapter
+import com.example.proyectostarwiki.adapters.PeliculasAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
-import com.example.proyectostarwiki.databinding.ActivityVehiculosBinding
-import com.example.proyectostarwiki.models.VehiculosData
-import com.google.firebase.auth.FirebaseAuth
+import com.example.proyectostarwiki.databinding.ActivityPeliculasBinding
+import com.example.proyectostarwiki.models.PeliculasData
 import kotlinx.coroutines.launch
 
-class VehiculosActivity : AppCompatActivity() {
-    lateinit var binding: ActivityVehiculosBinding
-    lateinit var adapter: VehiculosAdapter
+class PeliculasActivity : AppCompatActivity() {
+    lateinit var binding: ActivityPeliculasBinding
+    lateinit var adapter: PeliculasAdapter
     lateinit var conexion: BaseDatos
-    var lista = mutableListOf<VehiculosData>()
-    var listaBase = mutableListOf<VehiculosData>()
+    var listaBase = mutableListOf<PeliculasData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityVehiculosBinding.inflate(layoutInflater)
+        binding=ActivityPeliculasBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        conexion = BaseDatos(this)
+        conexion= BaseDatos(this)
         cargarFondo()
         setRecycler()
     }
 
     private fun setRecycler() {
-        traerVehiculos()
+        traerPelis()
         val layoutManager = GridLayoutManager(this, 1)
-        binding.recViewVeh.layoutManager=layoutManager
-        adapter= VehiculosAdapter(lista)
-        binding.recViewVeh.adapter=adapter
+        binding.recViewPelis.layoutManager=layoutManager
+        adapter= PeliculasAdapter(conexion.readPeliculas())
+        binding.recViewPelis.adapter=adapter
     }
 
-    private fun traerVehiculos() {
+    private fun traerPelis() {
         lifecycleScope.launch() {
-            val datos = apiClient.apiClient.getVehiculos()
+            val datos = apiClient.apiClient.getPeliculas()
             adapter.lista=datos.results.toMutableList()
             adapter.notifyDataSetChanged()
-            listaBase=conexion.readVehiculos()
-            if (listaBase.size==0){
+            listaBase=conexion.readPeliculas()
+            if (listaBase.isEmpty()){
                 for (i in datos.results){
-                    conexion.createVehiculos(datos.results[datos.results.indexOf(i)])
+                    conexion.createPeliculas(datos.results[datos.results.indexOf(i)])
                 }
             }
         }
     }
-
     private fun cargarFondo() {
         val urlGif = "https://i.gifer.com/IrM.gif"
         val uri = Uri.parse(urlGif)
-        Glide.with(applicationContext).load(uri).into(binding.fondoVehiculos)
+        Glide.with(applicationContext).load(uri).into(binding.fondoPelis)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,8 +66,8 @@ class VehiculosActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.itemBorrar->{
-                conexion.borrarVehiculos()
-                Toast.makeText(this, "Vehiculos borrados, vuelva a abrir la sección para volver a cargarlos...", Toast.LENGTH_SHORT).show()
+                conexion.borrarPeliculas()
+                Toast.makeText(this, "Peliculas borradas, vuelva a abrir la sección para volver a cargarlas...", Toast.LENGTH_SHORT).show()
                 finish()
             }
 
@@ -81,5 +78,4 @@ class VehiculosActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
 }

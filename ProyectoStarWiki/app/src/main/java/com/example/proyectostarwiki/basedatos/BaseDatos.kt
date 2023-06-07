@@ -6,19 +6,17 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.proyectostarwiki.models.NavesData
-import com.example.proyectostarwiki.models.PilotosData
-import com.example.proyectostarwiki.models.PlanetasData
-import com.example.proyectostarwiki.models.VehiculosData
+import com.example.proyectostarwiki.models.*
 
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
         const val DB="starWiki"
-        const val VERSION=2
+        const val VERSION=3
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
         const val TABLAPLANETAS="planetas"
+        const val TABLAPELICULAS="peliculas"
 
         const val qnaves= "create table $TABLANAVES(" +
                 "nombre text primary key not null unique, " +
@@ -48,6 +46,12 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "poblacion text not null, " +
                 "diametro text not null, " +
                 "terreno text not null)"
+
+        const val qpeliculas= "create table $TABLAPELICULAS(" +
+                "nombre text primary key not null unique, " +
+                "director text not null, " +
+                "productor text not null, " +
+                "estreno text not null)"
     }
 
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -63,6 +67,9 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         p0?.execSQL(qplanetas)
         Log.d("BaseDatos", "Creando tabla planetas")
 
+        p0?.execSQL(qpeliculas)
+        Log.d("BaseDatos", "Creando tabla peliculas")
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -70,9 +77,56 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         p0?.execSQL("DROP TABLE IF EXISTS $TABLAPILOTOS")
         p0?.execSQL("DROP TABLE IF EXISTS $TABLAPLANETAS")
         p0?.execSQL("DROP TABLE IF EXISTS $TABLAVEHICULOS")
+        p0?.execSQL("DROP TABLE IF EXISTS $TABLAPELICULAS")
         onCreate(p0)
     }
 
+    //Metodos para gestionar la tabla peliculas
+
+    fun createPeliculas(pelicula: PeliculasData): Long{
+        val conexion = this.writableDatabase
+        val valores = ContentValues().apply {
+            put("nombre", pelicula.nombre)
+            put("director", pelicula.director)
+            put("productor", pelicula.director)
+            put("estreno", pelicula.estreno)
+        }
+        val ins = conexion.insert(TABLAPELICULAS,null, valores)
+        conexion.close()
+        return ins
+    }
+
+    fun readPeliculas(): MutableList<PeliculasData>{
+        val lista = mutableListOf<PeliculasData>()
+        val q="select * from $TABLAPELICULAS order by nombre"
+        val conexion=this.readableDatabase
+        try {
+            val cursor = conexion.rawQuery(q, null)
+            if (cursor.moveToFirst()){
+                do {
+                    val pelicula=PeliculasData(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3)
+                    )
+                    lista.add(pelicula)
+                }while (cursor.moveToNext())
+            }
+            cursor.close()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        conexion.close()
+        return lista
+    }
+
+    fun borrarPeliculas(){
+        val conexion=this.writableDatabase
+        val q="delete from $TABLAPELICULAS where nombre=?"
+        conexion.execSQL(q, arrayOf("nombre"))
+        conexion.close()
+    }
 
     //Metodos para gestionar la tabla planetas
 
@@ -116,9 +170,10 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
-    fun borrarPlanetas(nombre: String){
+    fun borrarPlanetas(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPLANETAS where nombre='$nombre'"
+        val q="delete from $TABLAPLANETAS where nombre=?"
+        conexion.execSQL(q, arrayOf("nombre"))
         conexion.close()
     }
 
@@ -165,9 +220,10 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
-    fun borrarVehiculos(nombre: String){
+    fun borrarVehiculos(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAVEHICULOS where nombre='$nombre'"
+        val q="delete from $TABLAVEHICULOS where nombre=?"
+        conexion.execSQL(q, arrayOf("nombre"))
         conexion.close()
     }
 
@@ -214,9 +270,10 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
-    fun borrarNaves(nombre: String){
+    fun borrarNaves(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLANAVES where nombre='$nombre'"
+        val q="delete from $TABLANAVES where nombre=?"
+        conexion.execSQL(q, arrayOf("nombre"))
         conexion.close()
     }
 
@@ -320,12 +377,21 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         conexion.close()
     }
 
-    fun borrarPilotos(nombre: String){
+    fun borrarPilotos(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPILOTOS where nombre='$nombre'"
-        conexion.execSQL(q)
+        val q="delete from $TABLAPILOTOS where nombre=?"
+        conexion.execSQL(q, arrayOf("nombre"))
         conexion.close()
     }
 
+    //Metodo para borrar todas la base de datos
+
+    fun borrarTodo(){
+        borrarNaves()
+        borrarPilotos()
+        borrarVehiculos()
+        borrarPlanetas()
+        borrarPeliculas()
+    }
 
 }
