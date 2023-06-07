@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -45,7 +46,7 @@ class PeliculasActivity : AppCompatActivity() {
             adapter.lista=datos.results.toMutableList()
             adapter.notifyDataSetChanged()
             listaBase=conexion.readPeliculas()
-            if (listaBase.isEmpty()){
+            if (listaBase.size==0){
                 for (i in datos.results){
                     conexion.createPeliculas(datos.results[datos.results.indexOf(i)])
                 }
@@ -66,9 +67,28 @@ class PeliculasActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.itemBorrar->{
-                conexion.borrarPeliculas()
-                Toast.makeText(this, "Peliculas borradas, vuelva a abrir la sección para volver a cargarlas...", Toast.LENGTH_SHORT).show()
-                finish()
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("AVISO!!!")
+                alertDialogBuilder.setMessage("¿Seguro quiere borrar la tabla peliculas?")
+
+                // Botón positivo
+                alertDialogBuilder.setPositiveButton("Aceptar") { dialog, which ->
+                    // Acción al hacer clic en el botón positivo
+                    conexion.borrarPeliculas()
+                    Toast.makeText(this, "Peliculas borradas, vuelva a abrir la sección para volver a cargarlas...", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+
+                // Botón negativo
+                alertDialogBuilder.setNegativeButton("Cancelar") { dialog, which ->
+                    Toast.makeText(this, "Acción cancelada", Toast.LENGTH_SHORT).show()
+                }
+
+                // Crear el diálogo
+                val alertDialog = alertDialogBuilder.create()
+
+                // Mostrar el diálogo
+                alertDialog.show()
             }
 
             R.id.itemVolver->{
