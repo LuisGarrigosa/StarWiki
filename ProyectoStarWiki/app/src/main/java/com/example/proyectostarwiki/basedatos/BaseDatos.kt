@@ -88,7 +88,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         val valores = ContentValues().apply {
             put("nombre", pelicula.nombre)
             put("director", pelicula.director)
-            put("productor", pelicula.director)
+            put("productor", pelicula.productor)
             put("estreno", pelicula.estreno)
         }
         val ins = conexion.insert(TABLAPELICULAS,null, valores)
