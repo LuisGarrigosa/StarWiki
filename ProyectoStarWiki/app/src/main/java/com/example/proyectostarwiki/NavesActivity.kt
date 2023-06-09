@@ -78,8 +78,11 @@ class NavesActivity : AppCompatActivity() {
      *
      */
     private fun onItemClick(nave: NavesData) {
+        val posicion = 200
+
         val i = Intent(this,PilotosActivity::class.java).apply {
             putExtra("NAVESEL", nave)
+            putExtra("POSICION", posicion)
         }
         startActivity(i)
     }

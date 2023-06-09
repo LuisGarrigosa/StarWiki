@@ -42,7 +42,11 @@ class GestionPilotosActivity : AppCompatActivity() {
     }
 
     private fun addItem(position: Int) {
-        Toast.makeText(this, position, Toast.LENGTH_LONG).show()
+        val i = Intent(this,PilotosActivity::class.java).apply {
+            putExtra("NAVESEL", naveSeleccionada)
+            putExtra("POSICION",position+1)
+        }
+        startActivity(i)
     }
 
     @SuppressLint("NotifyDataSetChanged")

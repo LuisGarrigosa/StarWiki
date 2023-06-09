@@ -15,8 +15,7 @@ data class PilotosData(
     @SerializedName("name") val nombre:String,
     @SerializedName("gender") val genero:String,
     @SerializedName("height") val altura:String,
-    @SerializedName("mass") val peso:String,
-    val nombreNave:String?
+    @SerializedName("mass") val peso:String
 ):java.io.Serializable
 
 data class VehiculosData(

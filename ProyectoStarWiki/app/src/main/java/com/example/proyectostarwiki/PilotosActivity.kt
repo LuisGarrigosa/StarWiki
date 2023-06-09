@@ -9,14 +9,17 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.proyectostarwiki.adapters.PilotosAdapter
+import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
 import com.example.proyectostarwiki.databinding.ActivityPilotosBinding
 import com.example.proyectostarwiki.models.NavesData
 import com.example.proyectostarwiki.models.PilotosData
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class PilotosActivity : AppCompatActivity() {
     lateinit var binding: ActivityPilotosBinding
@@ -24,6 +27,7 @@ class PilotosActivity : AppCompatActivity() {
     lateinit var conexion: BaseDatos
     var listaBase = mutableListOf<PilotosData>()
     lateinit var naveSeleccionada: NavesData
+    var posicion = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,6 @@ class PilotosActivity : AppCompatActivity() {
         setContentView(binding.root)
         conexion = BaseDatos(this)
         cargarFondo()
-        cogerLista()
         setRecycler()
         setListeners()
         mandarDatos()
@@ -61,37 +64,27 @@ class PilotosActivity : AppCompatActivity() {
     private fun setRecycler() {
         val datos = intent.extras
         naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
+        posicion = datos?.getSerializable("POSICION") as Int
 
-        val layoutManager = GridLayoutManager(this, 3)
-        adapter = PilotosAdapter(listaBase)
+        val layoutManager = GridLayoutManager(this, 2)
         binding.recPilotos.layoutManager = layoutManager
+        adapter = PilotosAdapter(listaBase)
         binding.recPilotos.adapter = adapter
-    }
-
-    private fun actualizarListaPilotos() {
-        listaBase.clear()
-        listaBase.addAll(conexion.readPilotosSeleccionados(naveSeleccionada.nombre))
-        adapter.notifyDataSetChanged()
 
         if (listaBase.size > 0) {
             binding.tvVacio.visibility = View.INVISIBLE
         } else {
             binding.tvVacio.visibility = View.VISIBLE
         }
-    }
 
-    private fun cogerLista() {
-        val datos = intent.extras
-        naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
-
-        listaBase=conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
-        if (listaBase.size>0){
-            binding.tvVacio.visibility = View.INVISIBLE
-        }else{
-            binding.tvVacio.visibility = View.VISIBLE
+        if (posicion!=200) {
+            lifecycleScope.launch() {
+                val datos = apiClient.apiClient.getPilotosById(posicion)
+                adapter.lista = datos.results.toMutableList()
+                adapter.notifyDataSetChanged()
+            }
         }
 
-        setRecycler()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -132,10 +125,5 @@ class PilotosActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        actualizarListaPilotos()
     }
 }

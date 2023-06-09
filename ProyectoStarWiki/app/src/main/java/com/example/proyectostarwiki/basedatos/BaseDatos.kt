@@ -11,7 +11,7 @@ import com.example.proyectostarwiki.models.*
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
         const val DB="starWiki"
-        const val VERSION=4
+        const val VERSION=5
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
@@ -284,7 +284,6 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             put("genero", piloto.genero)
             put("altura", piloto.altura)
             put("peso", piloto.peso)
-            put("nombreNave", "null")
         }
         val ins = conexion.insert(TABLAPILOTOS, null, valores)
         conexion.close()
@@ -304,8 +303,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                         cursor.getString(cursor.getColumnIndex("nombre")),
                         cursor.getString(cursor.getColumnIndex("genero")),
                         cursor.getString(cursor.getColumnIndex("altura")),
-                        cursor.getString(cursor.getColumnIndex("peso")),
-                        cursor.getString(cursor.getColumnIndex("nombreNave"))
+                        cursor.getString(cursor.getColumnIndex("peso"))
                     )
                     lista.add(piloto)
                 }while (cursor.moveToNext())
@@ -333,8 +331,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                         cursor.getString(cursor.getColumnIndex("nombre")),
                         cursor.getString(cursor.getColumnIndex("genero")),
                         cursor.getString(cursor.getColumnIndex("altura")),
-                        cursor.getString(cursor.getColumnIndex("peso")),
-                        cursor.getString(cursor.getColumnIndex("nombreNave"))
+                        cursor.getString(cursor.getColumnIndex("peso"))
                     )
                     lista.add(piloto)
                 }while (cursor.moveToNext())

@@ -1,9 +1,8 @@
 package com.example.proyectostarwiki.apiprovider
 
 import com.example.proyectostarwiki.models.*
-import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface apiService {
     @GET("starships/")
@@ -21,6 +20,6 @@ interface apiService {
     @GET("films/")
     suspend fun getPeliculas(): peliculas
 
-    @GET("people/{id}/")
-    suspend fun getPilotosById(@Path("id") id: Int): pilotos
+    @GET("people/")
+    suspend fun getPilotosById(@Query("id") id: Int): pilotos
 }
