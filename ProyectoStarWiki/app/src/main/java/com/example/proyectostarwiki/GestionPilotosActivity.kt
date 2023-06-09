@@ -4,13 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.proyectostarwiki.adapters.PilotosAdapter
 import com.example.proyectostarwiki.adapters.SeleccionPilotosAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
@@ -46,27 +42,7 @@ class GestionPilotosActivity : AppCompatActivity() {
     }
 
     private fun addItem(position: Int) {
-        listaBase = conexion.readPilotos()
-
-        if (listaBase.isNotEmpty()) {
-            //Añadir piloto
-            val piloto = listaBase[position]
-            if (conexion.comprobarPiloto(piloto.nombre)){
-                conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
-                Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
-                val i = Intent(this, PilotosActivity::class.java).apply {
-                    putExtra("NAVESEL", naveSeleccionada)
-                    putExtra("PILOTOSEL", piloto)
-                }
-                listaBase = conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
-                startActivity(i)
-            } else {
-                Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            // La lista está vacía, realiza una acción alternativa o muestra un mensaje de error
-            Toast.makeText(this, "La lista esta vacia", Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(this, position, Toast.LENGTH_LONG).show()
     }
 
     @SuppressLint("NotifyDataSetChanged")

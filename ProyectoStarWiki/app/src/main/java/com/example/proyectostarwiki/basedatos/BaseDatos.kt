@@ -11,7 +11,7 @@ import com.example.proyectostarwiki.models.*
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
         const val DB="starWiki"
-        const val VERSION=3
+        const val VERSION=4
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
@@ -30,8 +30,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "nombre text primary key not null unique, " +
                 "genero text not null, " +
                 "altura text not null, " +
-                "peso text not null, " +
-                "nombreNave text)"
+                "peso text not null)"
 
         const val qvehiculos= "create table $TABLAVEHICULOS(" +
                 "nombre text primary key not null unique, " +

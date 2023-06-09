@@ -13,6 +13,5 @@ class PilotosViewHolder(v: View): RecyclerView.ViewHolder(v) {
         binding.tvGeneroPiloto.text=piloto.genero
         binding.tvAlturaPiloto.text=piloto.altura
         binding.tvPesoPiloto.text=piloto.peso
-        binding.tvNombreNave.text=piloto.nombreNave
     }
 }

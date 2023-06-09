@@ -21,6 +21,6 @@ interface apiService {
     @GET("films/")
     suspend fun getPeliculas(): peliculas
 
-    @GET("films/{id}/")
-    suspend fun getPeliculasById(@Path("id") id: Int): Response<peliculas>
+    @GET("people/{id}/")
+    suspend fun getPilotosById(@Path("id") id: Int): pilotos
 }
