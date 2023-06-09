@@ -1,7 +1,9 @@
 package com.example.proyectostarwiki.apiprovider
 
 import com.example.proyectostarwiki.models.*
+import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface apiService {
     @GET("starships/")
@@ -18,4 +20,7 @@ interface apiService {
 
     @GET("films/")
     suspend fun getPeliculas(): peliculas
+
+    @GET("films/{id}/")
+    suspend fun getPeliculasById(@Path("id") id: Int): Response<peliculas>
 }

@@ -1,3 +1,8 @@
+/**
+ * MainActivity.kt
+ * @author Luis Manuel Garrigosa Jimenez
+ */
+
 package com.example.proyectostarwiki
 
 import android.content.Intent
@@ -15,10 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
 class MainActivity : AppCompatActivity() {
-
+        //Creacion de variables que se inicializaran despues
         lateinit var binding: ActivityMainBinding
         lateinit var prefs: Prefs
 
+        //Variable que controla el login de Google
         private val responseLauncher= registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode== RESULT_OK){
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
@@ -40,8 +46,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+    /**
+     * Sobreescritura de la función onCreate, que hace que al iniciar el activity
+     * se lance lo que tenga dentro.
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Inicializacion de variables y uso de funciones
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         prefs= Prefs(this)
@@ -50,23 +63,41 @@ class MainActivity : AppCompatActivity() {
         setListeners()
     }
 
+    /**
+     * Función cargarFondo() que carga el fondo gif de la aplicación
+     * en el imageView que tiene la aplicación como fondo, usando una url
+     * para acceder al gif a través de internet
+     *
+     */
     private fun cargarFondo() {
         val urlGif = "https://i.gifer.com/IrM.gif"
         val uri = Uri.parse(urlGif)
         Glide.with(applicationContext).load(uri).into(binding.fondo)
     }
 
-
+    /**
+     * Función irMenu() que carga el activity MenuActivity
+     *
+     */
     private fun irMenu() {
         startActivity(Intent(this,MenuActivity::class.java))
     }
 
+    /**
+     * Función setListeners() que proporciona la funcionalidad a los botones del activity
+     *
+     */
     private fun setListeners() {
         binding.botonGoogle.setOnClickListener {
             login()
         }
     }
 
+    /**
+     * Función login() que se engarga de hacer el login de Google, usando la autenticación
+     * de mi proyecto de Firebase
+     *
+     */
     private fun login() {
         val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("902621700012-kl0fioie77dgdjormue63u09ggtpash9.apps.googleusercontent.com")
@@ -79,6 +110,12 @@ class MainActivity : AppCompatActivity() {
         responseLauncher.launch(googleClient.signInIntent)
     }
 
+    /**
+     * Función comprobarLogin() que se encarga de mirar si se había iniciado sesión antes
+     * pero no se habia cerrado la sesión aún, por lo tanto automáticamente iniciará sesión
+     * con la última cuenta que se dejó abierta la aplicación
+     *
+     */
     private fun comprobarLogin() {
         val email = prefs.getEmail()
         if (email!=null){
