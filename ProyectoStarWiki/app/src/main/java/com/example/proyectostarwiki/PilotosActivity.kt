@@ -68,18 +68,6 @@ class PilotosActivity : AppCompatActivity() {
         binding.recPilotos.adapter = adapter
     }
 
-    private fun actualizarListaPilotos() {
-        listaBase.clear()
-        listaBase.addAll(conexion.readPilotosSeleccionados(naveSeleccionada.nombre))
-        adapter.notifyDataSetChanged()
-
-        if (listaBase.size > 0) {
-            binding.tvVacio.visibility = View.INVISIBLE
-        } else {
-            binding.tvVacio.visibility = View.VISIBLE
-        }
-    }
-
     private fun cogerLista() {
         val datos = intent.extras
         naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
@@ -90,8 +78,6 @@ class PilotosActivity : AppCompatActivity() {
         }else{
             binding.tvVacio.visibility = View.VISIBLE
         }
-
-        setRecycler()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -136,6 +122,7 @@ class PilotosActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        actualizarListaPilotos()
+        cogerLista()
+        setRecycler()
     }
 }

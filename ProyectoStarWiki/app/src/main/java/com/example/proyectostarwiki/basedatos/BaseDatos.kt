@@ -11,7 +11,7 @@ import com.example.proyectostarwiki.models.*
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
         const val DB="starWiki"
-        const val VERSION=3
+        const val VERSION=5
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
@@ -278,14 +278,14 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     }
 
     //Metodos para gestionar la tabla de pilotos
-    fun createPilotos(piloto: PilotosData): Long{
+    fun createPilotos(piloto: PilotosData, nombreNave: String): Long{
         val conexion = this.writableDatabase
         val valores = ContentValues().apply {
             put("nombre", piloto.nombre)
             put("genero", piloto.genero)
             put("altura", piloto.altura)
             put("peso", piloto.peso)
-            put("nombreNave", "null")
+            put("nombreNave", nombreNave)
         }
         val ins = conexion.insert(TABLAPILOTOS, null, valores)
         conexion.close()

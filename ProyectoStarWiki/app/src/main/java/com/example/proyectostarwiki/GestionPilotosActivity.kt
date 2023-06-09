@@ -32,7 +32,6 @@ class GestionPilotosActivity : AppCompatActivity() {
         binding = ActivityGestionPilotosBinding.inflate(layoutInflater)
         setContentView(binding.root)
         conexion= BaseDatos(this)
-        traerPilotos()
         setRecycler()
         setListeners()
 
@@ -40,51 +39,50 @@ class GestionPilotosActivity : AppCompatActivity() {
 
     private fun setRecycler() {
         val layoutManager = GridLayoutManager(this, 4)
-        binding.recSeleccionPilotos.layoutManager=layoutManager
-        adapter=SeleccionPilotosAdapter(listaBase, {addItem(it)})
-        binding.recSeleccionPilotos.adapter=adapter
-    }
-
-    private fun addItem(position: Int) {
-        listaBase = conexion.readPilotos()
-
-        if (listaBase.isNotEmpty()) {
-            //Añadir piloto
-            val piloto = listaBase[position]
-            if (conexion.comprobarPiloto(piloto.nombre)){
-                conexion.modificarPiloto(piloto.nombre, naveSeleccionada.nombre)
-                Toast.makeText(this, "Piloto modificado correctamente", Toast.LENGTH_SHORT).show()
-                val i = Intent(this, PilotosActivity::class.java).apply {
-                    putExtra("NAVESEL", naveSeleccionada)
-                    putExtra("PILOTOSEL", piloto)
-                }
-                listaBase = conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
-                startActivity(i)
-            } else {
-                Toast.makeText(this, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            // La lista está vacía, realiza una acción alternativa o muestra un mensaje de error
-            Toast.makeText(this, "La lista esta vacia", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun traerPilotos() {
         lifecycleScope.launch() {
             val datos = apiClient.apiClient.getPilotos()
-            adapter.lista = datos.results.toMutableList()
-            adapter.notifyDataSetChanged()
-            listaBase = conexion.readPilotos()
-            if (listaBase.isEmpty()){
-                for (i in datos.results){
-                    conexion.createPilotos(datos.results[datos.results.indexOf(i)])
-                }
-            }
+            binding.recSeleccionPilotos.layoutManager=layoutManager
+            adapter=SeleccionPilotosAdapter(datos.results.toMutableList(), {addItem(it)})
+            binding.recSeleccionPilotos.adapter=adapter
         }
 
         val datos = intent.extras
         naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
+    }
+
+    private fun addItem(position: Int) {
+        lifecycleScope.launch() {
+            val datos = apiClient.apiClient.getPilotos()
+            val pilotoBuscado = (datos.results.get(position+1))
+
+            val datosRecogidos = intent.extras
+            naveSeleccionada = datosRecogidos?.getSerializable("NAVESEL") as NavesData
+
+            listaBase = conexion.readPilotos()
+            var contador = 0
+
+            for (piloto in listaBase){
+                if (piloto.nombre == pilotoBuscado.nombre){
+                    if (piloto.nombreNave?.isNotEmpty() == true){
+                        Toast.makeText(this@GestionPilotosActivity, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+                    } else {
+                        conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
+                        Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
+                        val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
+                            putExtra("NAVESEL", naveSeleccionada)
+                        }
+                        startActivity(i)
+                    }
+                } else {
+                    conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
+                    Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
+                    val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
+                        putExtra("NAVESEL", naveSeleccionada)
+                    }
+                    startActivity(i)
+                }
+            }
+        }
     }
 
     private fun setListeners() {
