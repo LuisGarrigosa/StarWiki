@@ -62,9 +62,10 @@ class PilotosActivity : AppCompatActivity() {
         val datos = intent.extras
         naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
 
-        val layoutManager = GridLayoutManager(this, 3)
-        adapter = PilotosAdapter(listaBase)
+        listaBase=conexion.readPilotosSeleccionados(naveSeleccionada.nombre)
+        val layoutManager = GridLayoutManager(this, 1)
         binding.recPilotos.layoutManager = layoutManager
+        adapter = PilotosAdapter(listaBase)
         binding.recPilotos.adapter = adapter
     }
 
@@ -96,7 +97,7 @@ class PilotosActivity : AppCompatActivity() {
                 alertDialogBuilder.setPositiveButton("Aceptar") { dialog, which ->
                     // Acción al hacer clic en el botón positivo
                     conexion.borrarPilotos()
-                    Toast.makeText(this, "Pilotos borrados, vuelva a abrir la sección para volver a cargarlos...", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Pilotos borrados, añada de nuevo pilotos a la base de datos...", Toast.LENGTH_LONG).show()
                     finish()
                 }
 
@@ -113,7 +114,9 @@ class PilotosActivity : AppCompatActivity() {
             }
 
             R.id.itemVolver->{
-                finish()
+                val i = Intent(this,NavesActivity::class.java)
+
+                startActivity(i)
             }
         }
 

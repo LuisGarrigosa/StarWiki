@@ -19,3 +19,9 @@ data class planetas(
 data class peliculas(
     val results: List<PeliculasData>
 )
+
+data class Mensajes(
+    val texto: String?=null,
+    val email: String?=null,
+    val fecha: Long=System.currentTimeMillis()
+)

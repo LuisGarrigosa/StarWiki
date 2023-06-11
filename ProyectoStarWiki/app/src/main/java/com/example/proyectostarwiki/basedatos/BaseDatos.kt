@@ -11,7 +11,7 @@ import com.example.proyectostarwiki.models.*
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     companion object{
         const val DB="starWiki"
-        const val VERSION=5
+        const val VERSION=6
         const val TABLANAVES="naves"
         const val TABLAPILOTOS="pilotos"
         const val TABLAVEHICULOS="vehiculos"
@@ -31,7 +31,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "genero text not null, " +
                 "altura text not null, " +
                 "peso text not null, " +
-                "nombreNave text)"
+                "nombreNave text not null)"
 
         const val qvehiculos= "create table $TABLAVEHICULOS(" +
                 "nombre text primary key not null unique, " +
@@ -123,8 +123,8 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarPeliculas(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPELICULAS where nombre=?"
-        conexion.execSQL(q, arrayOf("nombre"))
+        val q="delete from $TABLAPELICULAS"
+        conexion.execSQL(q)
         conexion.close()
     }
 
@@ -172,8 +172,8 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarPlanetas(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPLANETAS where nombre=?"
-        conexion.execSQL(q, arrayOf("nombre"))
+        val q="delete from $TABLAPLANETAS"
+        conexion.execSQL(q)
         conexion.close()
     }
 
@@ -222,8 +222,8 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarVehiculos(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAVEHICULOS where nombre=?"
-        conexion.execSQL(q, arrayOf("nombre"))
+        val q="delete from $TABLAVEHICULOS"
+        conexion.execSQL(q)
         conexion.close()
     }
 
@@ -272,8 +272,8 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarNaves(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLANAVES where nombre=?"
-        conexion.execSQL(q, arrayOf("nombre"))
+        val q="delete from $TABLANAVES"
+        conexion.execSQL(q)
         conexion.close()
     }
 
@@ -343,11 +343,9 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             cursor.close()
         }catch (e: Exception){
             e.printStackTrace()
-        }finally {
-            conexion.close()
         }
+        conexion.close()
         return lista
-
     }
 
     fun comprobarPiloto(nombre: String): Boolean{
@@ -379,8 +377,8 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     fun borrarPilotos(){
         val conexion=this.writableDatabase
-        val q="delete from $TABLAPILOTOS where nombre=?"
-        conexion.execSQL(q, arrayOf("nombre"))
+        val q="delete from $TABLAPILOTOS"
+        conexion.execSQL(q)
         conexion.close()
     }
 

@@ -53,18 +53,29 @@ class GestionPilotosActivity : AppCompatActivity() {
     private fun addItem(position: Int) {
         lifecycleScope.launch() {
             val datos = apiClient.apiClient.getPilotos()
-            val pilotoBuscado = (datos.results.get(position+1))
+            val pilotoBuscado = (datos.results.get(position))
 
             val datosRecogidos = intent.extras
             naveSeleccionada = datosRecogidos?.getSerializable("NAVESEL") as NavesData
 
             listaBase = conexion.readPilotos()
-            var contador = 0
 
-            for (piloto in listaBase){
-                if (piloto.nombre == pilotoBuscado.nombre){
-                    if (piloto.nombreNave?.isNotEmpty() == true){
-                        Toast.makeText(this@GestionPilotosActivity, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+            if (listaBase.size > 0){
+                for (piloto in listaBase){
+                    if (piloto.nombre == pilotoBuscado.nombre){
+                        if (piloto.nombreNave?.isNotEmpty() == true){
+                            Toast.makeText(this@GestionPilotosActivity, "El piloto ya tiene una nave asignada", Toast.LENGTH_SHORT).show()
+                            finish()
+                            break
+                        } else {
+                            conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
+                            Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
+                            val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
+                                putExtra("NAVESEL", naveSeleccionada)
+                            }
+                            startActivity(i)
+                            break
+                        }
                     } else {
                         conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
                         Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
@@ -72,15 +83,16 @@ class GestionPilotosActivity : AppCompatActivity() {
                             putExtra("NAVESEL", naveSeleccionada)
                         }
                         startActivity(i)
+                        break
                     }
-                } else {
-                    conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
-                    Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
-                    val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
-                        putExtra("NAVESEL", naveSeleccionada)
-                    }
-                    startActivity(i)
                 }
+            } else {
+                conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
+                Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
+                val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
+                    putExtra("NAVESEL", naveSeleccionada)
+                }
+                startActivity(i)
             }
         }
     }

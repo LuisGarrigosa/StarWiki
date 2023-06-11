@@ -73,6 +73,14 @@ class MenuActivity : AppCompatActivity() {
         binding.btnPeliculas.setOnClickListener {
             irPeliculas()
         }
+
+        binding.btnChat.setOnClickListener {
+            irChat()
+        }
+    }
+
+    private fun irChat() {
+        startActivity(Intent(this,ChatActivity::class.java))
     }
 
     /**
@@ -143,7 +151,8 @@ class MenuActivity : AppCompatActivity() {
                     FirebaseAuth.getInstance().signOut()
                     prefs.borrarTodo()
                     Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-                    finish()
+                    val i = Intent(this,MainActivity::class.java)
+                    startActivity(i)
                 }
 
                 // Botón negativo
@@ -176,7 +185,8 @@ class MenuActivity : AppCompatActivity() {
                     prefs.borrarTodo()
                     conexion.borrarTodo()
                     Toast.makeText(this, "Base de datos borrada, vuelva a iniciar sesión...", Toast.LENGTH_LONG).show()
-                    finish()
+                    val i = Intent(this,MainActivity::class.java)
+                    startActivity(i)
                 }
 
                 // Botón negativo

@@ -23,7 +23,7 @@
         android:id="@+id/tvVacio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="290dp"
         android:text="No hay pilotos"
         android:textColor="#F41010"
         android:textSize="20sp"
@@ -31,7 +31,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recPilotos" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNaveSel" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAdd"

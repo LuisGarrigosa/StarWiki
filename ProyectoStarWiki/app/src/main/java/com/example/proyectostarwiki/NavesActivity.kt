@@ -154,7 +154,8 @@ class NavesActivity : AppCompatActivity() {
             }
 
             R.id.itemVolver->{
-                finish()
+                val i = Intent(this,MenuActivity::class.java)
+                startActivity(i)
             }
         }
 
