@@ -1,3 +1,8 @@
+/**
+ * BaseDatos.kt
+ * @author Luis Manuel Garrigosa Jimenez
+ */
+
 package com.example.proyectostarwiki.basedatos
 
 import android.annotation.SuppressLint
@@ -9,6 +14,7 @@ import android.util.Log
 import com.example.proyectostarwiki.models.*
 
 class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
+    //Objetos con las variables de la base de datos
     companion object{
         const val DB="starWiki"
         const val VERSION=6
@@ -17,7 +23,7 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         const val TABLAVEHICULOS="vehiculos"
         const val TABLAPLANETAS="planetas"
         const val TABLAPELICULAS="peliculas"
-
+        //Query con la creación de la tabla naves
         const val qnaves= "create table $TABLANAVES(" +
                 "nombre text primary key not null unique, " +
                 "clase text not null, " +
@@ -25,28 +31,28 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "longitud text not null, " +
                 "pasajeros text not null, " +
                 "creditos text not null)"
-
+        //Query con la creación de la tabla pilotos
         const val qpilotos= "create table $TABLAPILOTOS(" +
                 "nombre text primary key not null unique, " +
                 "genero text not null, " +
                 "altura text not null, " +
                 "peso text not null, " +
                 "nombreNave text not null)"
-
+        //Query con la creación de la tabla vehiculos
         const val qvehiculos= "create table $TABLAVEHICULOS(" +
                 "nombre text primary key not null unique, " +
                 "modelo text not null, " +
                 "altura text not null, " +
                 "velocidad text not null, " +
                 "fabricante text not null)"
-
+        //Query con la creación de la tabla planetas
         const val qplanetas= "create table $TABLAPLANETAS(" +
                 "nombre text primary key not null unique, " +
                 "gravedad text not null, " +
                 "poblacion text not null, " +
                 "diametro text not null, " +
                 "terreno text not null)"
-
+        //Query con la creación de la tabla peliculas
         const val qpeliculas= "create table $TABLAPELICULAS(" +
                 "nombre text primary key not null unique, " +
                 "director text not null, " +
@@ -54,24 +60,36 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
                 "estreno text not null)"
     }
 
+    /**
+     * Sobreescritura de la función onCreate, que hace que al iniciar el activity
+     * se lance lo que tenga dentro.
+     *
+     */
     override fun onCreate(p0: SQLiteDatabase?) {
+        //Cración de la tabla naves
         p0?.execSQL(qnaves)
         Log.d("BaseDatos", "Creando tabla naves")
-
+        //Cración de la tabla pilotos
         p0?.execSQL(qpilotos)
         Log.d("BaseDatos", "Creando tabla pilotos")
-
+        //Cración de la tabla vehiculos
         p0?.execSQL(qvehiculos)
         Log.d("BaseDatos", "Creando tabla vehiculos")
-
+        //Cración de la tabla planetas
         p0?.execSQL(qplanetas)
         Log.d("BaseDatos", "Creando tabla planetas")
-
+        //Cración de la tabla peliculas
         p0?.execSQL(qpeliculas)
         Log.d("BaseDatos", "Creando tabla peliculas")
 
     }
 
+    /**
+     * Sobreescritura de la función onUpgrade, que al subir la versión de la
+     * base de datos, borra las tablas existentes y vuelve a lanzar el método
+     * onCreate
+     *
+     */
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
         p0?.execSQL("DROP TABLE IF EXISTS $TABLANAVES")
         p0?.execSQL("DROP TABLE IF EXISTS $TABLAPILOTOS")
@@ -83,6 +101,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     //Metodos para gestionar la tabla peliculas
 
+    /**
+     * Función createPeliculas() para crear una pelicula nueva en la tabla
+     *
+     * @param pelicula Pelicula seleccionada para crear
+     * @return insert de la tabla peliculas con los valores de la pelicula seleccionada
+     *
+     */
     fun createPeliculas(pelicula: PeliculasData): Long{
         val conexion = this.writableDatabase
         val valores = ContentValues().apply {
@@ -96,6 +121,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return ins
     }
 
+    /**
+     * Función readPeliculas() para leer todas las peliculas que hay
+     * en la tabla peliculas ordenadas por nombre
+     *
+     * @return lista de la tabla peliculas ordenadas por nombre
+     *
+     */
     fun readPeliculas(): MutableList<PeliculasData>{
         val lista = mutableListOf<PeliculasData>()
         val q="select * from $TABLAPELICULAS order by nombre"
@@ -121,6 +153,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
+    /**
+     * Función borrarPeliculas() para borrar el contenido de la
+     * tabla peliculas
+     *
+     */
     fun borrarPeliculas(){
         val conexion=this.writableDatabase
         val q="delete from $TABLAPELICULAS"
@@ -130,6 +167,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     //Metodos para gestionar la tabla planetas
 
+    /**
+     * Función createPlanetas() para crear un planeta nuevo en la tabla
+     *
+     * @param planeta Planeta seleccionado para crear
+     * @return insert de la tabla planetas con los valores del planeta seleccionado
+     *
+     */
     fun createPlanetas(planeta: PlanetasData): Long{
         val conexion = this.writableDatabase
         val valores = ContentValues().apply {
@@ -144,6 +188,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return ins
     }
 
+    /**
+     * Función readPlanetas() para leer todos los planetas que hay
+     * en la tabla planetas ordenados por nombre
+     *
+     * @return lista de la tabla planetas ordenados por nombre
+     *
+     */
     fun readPlanetas(): MutableList<PlanetasData>{
         val lista = mutableListOf<PlanetasData>()
         val q="select * from $TABLAPLANETAS order by nombre"
@@ -170,6 +221,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
+    /**
+     * Función borrarPlanetas() para borrar el contenido de la
+     * tabla planetas
+     *
+     */
     fun borrarPlanetas(){
         val conexion=this.writableDatabase
         val q="delete from $TABLAPLANETAS"
@@ -180,6 +236,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     //Metodos para gestionar la tabla vehiculos
 
+    /**
+     * Función createVehiculos() para crear un vehiculo nuevo en la tabla
+     *
+     * @param vehiculo Vehiculo seleccionado para crear
+     * @return insert de la tabla vehiculos con los valores del vehiculo seleccionado
+     *
+     */
     fun createVehiculos(vehiculo: VehiculosData): Long{
         val conexion = this.writableDatabase
         val valores = ContentValues().apply {
@@ -194,6 +257,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return ins
     }
 
+    /**
+     * Función readVehiculos() para leer todos los vehiculos que hay
+     * en la tabla vehiculos ordenados por nombre
+     *
+     * @return lista de la tabla vehiculos ordenados por nombre
+     *
+     */
     fun readVehiculos(): MutableList<VehiculosData>{
         val lista = mutableListOf<VehiculosData>()
         val q="select * from $TABLAVEHICULOS order by nombre"
@@ -220,6 +290,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
+    /**
+     * Función borrarVehiculos() para borrar el contenido de la
+     * tabla vehiculos
+     *
+     */
     fun borrarVehiculos(){
         val conexion=this.writableDatabase
         val q="delete from $TABLAVEHICULOS"
@@ -228,6 +303,14 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     }
 
     //Metodos para gestionar la tabla de naves
+
+    /**
+     * Función createNaves() para crear una nave nuevo en la tabla
+     *
+     * @param nave Nave seleccionada para crear
+     * @return insert de la tabla naves con los valores de la nave seleccionada
+     *
+     */
     fun createNaves(nave: NavesData): Long{
         val conexion = this.writableDatabase
         val valores = ContentValues().apply {
@@ -243,6 +326,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return ins
     }
 
+    /**
+     * Función readNaves() para leer todas las naves que hay
+     * en la tabla naves ordenados por nombre
+     *
+     * @return lista de la tabla naves ordenados por nombre
+     *
+     */
     fun readNaves(): MutableList<NavesData>{
         val lista = mutableListOf<NavesData>()
         val q="select * from $TABLANAVES order by nombre"
@@ -270,6 +360,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
+    /**
+     * Función borrarNaves() para borrar el contenido de la
+     * tabla naves
+     *
+     */
     fun borrarNaves(){
         val conexion=this.writableDatabase
         val q="delete from $TABLANAVES"
@@ -278,6 +373,14 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
     }
 
     //Metodos para gestionar la tabla de pilotos
+
+    /**
+     * Función createPilotos() para crear un piloto nuevo en la tabla
+     *
+     * @param piloto Piloto seleccionado para crear
+     * @return insert de la tabla pilotos con los valores del piloto seleccionada
+     *
+     */
     fun createPilotos(piloto: PilotosData, nombreNave: String): Long{
         val conexion = this.writableDatabase
         val valores = ContentValues().apply {
@@ -292,6 +395,13 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return ins
     }
 
+    /**
+     * Función readPilotos() para leer todos los pilotos que hay
+     * en la tabla pilotos ordenados por nombre
+     *
+     * @return lista de la tabla pilotos ordenados por nombre
+     *
+     */
     @SuppressLint("Range")
     fun readPilotos(): MutableList<PilotosData>{
         val lista = mutableListOf<PilotosData>()
@@ -314,13 +424,21 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
             cursor.close()
         }catch (e: Exception){
             e.printStackTrace()
-        }finally {
-            conexion.close()
         }
+        conexion.close()
+
         return lista
 
     }
 
+    /**
+     * Función readPilotosSeleccionados() para leer todos los pilotos que hay
+     * en la tabla pilotos que contengan el mismo nombre de nave ordenados por nombre
+     *
+     * @param nombreNave Nombre de la nave que se busca en los pilotos
+     * @return lista de la tabla pilotos ordenados por nombre
+     *
+     */
     @SuppressLint("Range")
     fun readPilotosSeleccionados(nombreNave: String): MutableList<PilotosData>{
         val lista = mutableListOf<PilotosData>()
@@ -348,33 +466,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
         return lista
     }
 
-    fun comprobarPiloto(nombre: String): Boolean{
-        val q = "select nombre from $TABLAPILOTOS where nombre='$nombre' or nombreNave IS NOT NULL"
-        val conexion = this.readableDatabase
-        var contador=0
-        try {
-            val cursor = conexion.rawQuery(q, null)
-            contador = cursor.count
-            cursor.close()
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-        conexion.close()
-
-        return contador > 0
-    }
-
-    fun modificarPiloto(nombre: String, nombreNave: String) {
-        val conexion = this.writableDatabase
-        val q = "UPDATE $TABLAPILOTOS SET nombreNave = ? WHERE nombre = ?"
-        try {
-            conexion.execSQL(q, arrayOf(nombreNave, nombre))
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        conexion.close()
-    }
-
+    /**
+     * Función borrarPilotos() para borrar el contenido de la
+     * tabla pilotos
+     *
+     */
     fun borrarPilotos(){
         val conexion=this.writableDatabase
         val q="delete from $TABLAPILOTOS"
@@ -384,6 +480,11 @@ class BaseDatos(c: Context): SQLiteOpenHelper(c, DB, null, VERSION) {
 
     //Metodo para borrar todas la base de datos
 
+    /**
+     * Función borrarTodo() para borrar el contenido de las
+     * tablas de la base de datos
+     *
+     */
     fun borrarTodo(){
         borrarNaves()
         borrarPilotos()

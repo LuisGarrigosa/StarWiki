@@ -79,6 +79,10 @@ class MenuActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Función irChat() que carga el activity ChatActivity
+     *
+     */
     private fun irChat() {
         startActivity(Intent(this,ChatActivity::class.java))
     }

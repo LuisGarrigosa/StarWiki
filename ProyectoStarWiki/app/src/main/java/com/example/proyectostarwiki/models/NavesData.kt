@@ -1,7 +1,17 @@
+/**
+ * NavesData.kt
+ * @author Luis Manuel Garrigosa Jimenez
+ */
+
 package com.example.proyectostarwiki.models
 
-
 import com.google.gson.annotations.SerializedName
+
+/**
+ * Data class para las naves, con los datos
+ * asignados de la api
+ *
+ */
 data class NavesData(
     @SerializedName("name") val nombre:String,
     @SerializedName("starship_class") val clase:String,
@@ -11,6 +21,11 @@ data class NavesData(
     @SerializedName("cost_in_credits") val creditos:String
 ):java.io.Serializable
 
+/**
+ * Data class para los pilotos, con los datos
+ * asignados de la api
+ *
+ */
 data class PilotosData(
     @SerializedName("name") val nombre:String,
     @SerializedName("gender") val genero:String,
@@ -19,6 +34,11 @@ data class PilotosData(
     val nombreNave:String?
 ):java.io.Serializable
 
+/**
+ * Data class para los vehiculos, con los datos
+ * asignados de la api
+ *
+ */
 data class VehiculosData(
     @SerializedName("name") val nombre: String,
     @SerializedName("model") val modelo: String,
@@ -28,6 +48,11 @@ data class VehiculosData(
 
 ):java.io.Serializable
 
+/**
+ * Data class para los planetas, con los datos
+ * asignados de la api
+ *
+ */
 data class PlanetasData(
     @SerializedName("name") val nombre: String,
     @SerializedName("gravity") val gravedad: String,
@@ -36,6 +61,11 @@ data class PlanetasData(
     @SerializedName("terrain") val terreno: String
 ):java.io.Serializable
 
+/**
+ * Data class para las peliculas, con los datos
+ * asignados de la api
+ *
+ */
 data class PeliculasData(
     @SerializedName("title") val nombre: String,
     @SerializedName("director") val director: String,

@@ -1,3 +1,8 @@
+/**
+ * SeleccionPilotosViewHolder.kt
+ * @author Luis Manuel Garrigosa Jimenez
+ */
+
 package com.example.proyectostarwiki.adapters
 
 import android.view.View

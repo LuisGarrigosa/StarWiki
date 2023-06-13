@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "902621700012",
-    "project_id": "starwiki-70794",
-    "storage_bucket": "starwiki-70794.appspot.com"
+    "project_number": "128180867298",
+    "project_id": "starwiki-b2e08",
+    "storage_bucket": "starwiki-b2e08.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:902621700012:android:d26244ffaac801f725e409",
+        "mobilesdk_app_id": "1:128180867298:android:b10089feac8ac00ed8cebb",
         "android_client_info": {
           "package_name": "com.example.proyectostarwiki"
         }
       },
       "oauth_client": [
         {
-          "client_id": "902621700012-kl0fioie77dgdjormue63u09ggtpash9.apps.googleusercontent.com",
+          "client_id": "128180867298-fv8in92tatvf3472mde62s6ivj05uk4j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDvlzFyPLir8m3dLbWVQSG65ZvRQToOY8M"
+          "current_key": "AIzaSyAQEab8a73EtmzF9LbsOBYjAC_TBkA487A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "902621700012-84km25d83ld99i0jlo2hvpsahf90cpak.apps.googleusercontent.com",
+              "client_id": "128180867298-fv8in92tatvf3472mde62s6ivj05uk4j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

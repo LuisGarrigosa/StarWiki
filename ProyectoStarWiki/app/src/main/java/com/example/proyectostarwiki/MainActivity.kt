@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun login() {
         val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("902621700012-kl0fioie77dgdjormue63u09ggtpash9.apps.googleusercontent.com")
+            .requestIdToken("128180867298-fv8in92tatvf3472mde62s6ivj05uk4j.apps.googleusercontent.com")
             .requestEmail()
             .build()
         val googleClient = GoogleSignIn.getClient(this, googleConf)

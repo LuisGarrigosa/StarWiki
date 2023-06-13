@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cLayoutPilotos"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
@@ -10,6 +9,7 @@
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cLayoutChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#888080"
@@ -19,7 +19,7 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="70dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:text="Nombre:"
             android:textColor="#3F51B5"
@@ -70,13 +70,13 @@
             android:id="@+id/tvNombrePiloto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="2dp"
             android:layout_marginEnd="20dp"
             android:text="TextView"
             android:textColor="#F8F2F2"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivNave"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toTopOf="@+id/textView5" />
 
@@ -114,5 +114,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tvAlturaPiloto"
             app:layout_constraintTop_toBottomOf="@+id/tvAlturaPiloto" />
+
+        <ImageView
+            android:id="@+id/ivNave"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

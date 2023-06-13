@@ -127,6 +127,7 @@ class NavesActivity : AppCompatActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            //Item que borra las tablas naves y pilotos
             R.id.itemBorrar->{
                 val alertDialogBuilder = AlertDialog.Builder(this)
                 alertDialogBuilder.setTitle("AVISO!!!")
@@ -153,6 +154,7 @@ class NavesActivity : AppCompatActivity() {
                 alertDialog.show()
             }
 
+            //Item para volver al activity menu
             R.id.itemVolver->{
                 val i = Intent(this,MenuActivity::class.java)
                 startActivity(i)

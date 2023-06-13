@@ -1,16 +1,16 @@
+/**
+ * GestionPilotosActivity.kt
+ * @author Luis Manuel Garrigosa Jimenez
+ */
+
 package com.example.proyectostarwiki
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.proyectostarwiki.adapters.PilotosAdapter
 import com.example.proyectostarwiki.adapters.SeleccionPilotosAdapter
 import com.example.proyectostarwiki.apiprovider.apiClient
 import com.example.proyectostarwiki.basedatos.BaseDatos
@@ -20,13 +20,18 @@ import com.example.proyectostarwiki.models.PilotosData
 import kotlinx.coroutines.launch
 
 class GestionPilotosActivity : AppCompatActivity() {
+    //Creación de variables que se inicializarán más tarde
     lateinit var binding: ActivityGestionPilotosBinding
     var listaBase = mutableListOf<PilotosData>()
     lateinit var adapter: SeleccionPilotosAdapter
     lateinit var conexion: BaseDatos
     lateinit var naveSeleccionada: NavesData
 
-
+    /**
+     * Sobreescritura de la función onCreate, que hace que al iniciar el activity
+     * se lance lo que tenga dentro.
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGestionPilotosBinding.inflate(layoutInflater)
@@ -37,6 +42,11 @@ class GestionPilotosActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Función setRecycler() que se encarga de inicializar el
+     * recyclerView y adaptarlo al formato que me interesa
+     *
+     */
     private fun setRecycler() {
         val layoutManager = GridLayoutManager(this, 4)
         lifecycleScope.launch() {
@@ -50,6 +60,13 @@ class GestionPilotosActivity : AppCompatActivity() {
         naveSeleccionada = datos?.getSerializable("NAVESEL") as NavesData
     }
 
+    /**
+     * Función addItem() que le da funcionalidad al botón para añadir cada piloto dentro del
+     * recyclerView, se crea un piloto con los datos del piloto seleccionado y se comprueba si
+     * ya ha sido seleccionado en alguna nave, si es así se avisa de que el piloto ya está asignado
+     * a una nave, si no es así se añade el piloto a la nave y se añade a la base de datos
+     *
+     */
     private fun addItem(position: Int) {
         lifecycleScope.launch() {
             val datos = apiClient.apiClient.getPilotos()
@@ -76,16 +93,14 @@ class GestionPilotosActivity : AppCompatActivity() {
                             startActivity(i)
                             break
                         }
-                    } else {
-                        conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
-                        Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
-                        val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
-                            putExtra("NAVESEL", naveSeleccionada)
-                        }
-                        startActivity(i)
-                        break
                     }
                 }
+                conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
+                Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
+                val i = Intent(this@GestionPilotosActivity, PilotosActivity::class.java).apply {
+                    putExtra("NAVESEL", naveSeleccionada)
+                }
+                startActivity(i)
             } else {
                 conexion.createPilotos(pilotoBuscado, naveSeleccionada.nombre)
                 Toast.makeText(this@GestionPilotosActivity, "El piloto se ha añadido", Toast.LENGTH_SHORT).show()
@@ -97,6 +112,10 @@ class GestionPilotosActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Función setListeners() que proporciona la funcionalidad a los botones del activity
+     *
+     */
     private fun setListeners() {
 
         binding.btnCancelar.setOnClickListener {
@@ -107,6 +126,11 @@ class GestionPilotosActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Sobreescritura de la función onResume() que se encarga de realizar una acción al cargar
+     * de nuevo el activity.
+     *
+     */
     override fun onResume() {
         super.onResume()
         setRecycler()

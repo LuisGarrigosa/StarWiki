@@ -1,3 +1,8 @@
+/**
+ * MensajesViewHolder.kt
+ * @author Luis Manuel Garrigosa Jimenez
+ */
+
 package com.example.proyectostarwiki.adapters
 
 import android.view.View
@@ -17,9 +22,9 @@ class MensajesViewHolder(v: View): RecyclerView.ViewHolder(v) {
         binding.tvEmail.text=m.email
         binding.tvHora.text=convertLongToDate(m.fecha)
         if (m.email==email){
-            binding.cLayout.setBackgroundColor(ContextCompat.getColor(binding.cLayout.context, R.color.cchat))
+            binding.cLayoutChat.setBackgroundColor(ContextCompat.getColor(binding.cLayoutChat.context, R.color.cchat))
         }else{
-            binding.cLayout.setBackgroundColor(ContextCompat.getColor(binding.cLayout.context, R.color.white))
+            binding.cLayoutChat.setBackgroundColor(ContextCompat.getColor(binding.cLayoutChat.context, R.color.white))
         }
     }
 
